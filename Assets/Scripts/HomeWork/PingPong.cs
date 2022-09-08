@@ -3,11 +3,11 @@ using UnityEngine;
 public class PingPong : MonoBehaviour
 {
     [SerializeField]
-    public Vector3 pointA = new Vector3(0.0f, 0.0f, 0.0f);
+    private Vector3 pointA = new Vector3(0.0f, 0.0f, 0.0f);
     [SerializeField]
-    public Vector3 pointB = new Vector3(0.0f, 10.0f, 0.0f);
+    private Vector3 pointB = new Vector3(0.0f, 10.0f, 0.0f);
     [SerializeField]
-    public float speed = 1f;
+    private float speed = 1f;
 
     private bool isMoveToPointB;
 
