@@ -113,4 +113,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointA: {x: 0, y: 0, z: -27.85}
   pointB: {x: 0, y: 20, z: -27.85}
-  speed: 0.5
+  speed: 2
