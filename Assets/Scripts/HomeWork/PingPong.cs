@@ -24,7 +24,7 @@ public class PingPong : MonoBehaviour
 
     private void Move()
     {
-        if ((pointB - transform.position).magnitude != 0 && isMoveToPointB) 
+        if ((pointB - transform.position).sqrMagnitude != 0 && isMoveToPointB) 
         {
             transform.position = Vector3.MoveTowards(transform.position, pointB, speed * Time.deltaTime);
         }
@@ -32,7 +32,7 @@ public class PingPong : MonoBehaviour
         {
             isMoveToPointB = false;
         }
-        if ((pointA - transform.position).magnitude != 0 && !isMoveToPointB)
+        if ((pointA - transform.position).sqrMagnitude != 0 && !isMoveToPointB)
         {
             transform.position = Vector3.MoveTowards(transform.position, pointA, speed * Time.deltaTime);
         }
