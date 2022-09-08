@@ -5,9 +5,14 @@ using UnityEngine;
 public class Rotate : MonoBehaviour
 {
     [SerializeField]
-    float rotationSpeed = 0.0f;
+    private float xAngle;
 
-    private float rotationValue = 0.0f;
+    [SerializeField]
+    private float yAngle;
+
+    [SerializeField]
+    private float zAngle;
+
 
     void Start()
     {
@@ -16,13 +21,11 @@ public class Rotate : MonoBehaviour
 
     void Update()
     {
-        Move();
+        RotateObject();
     }
 
-    private void Move()
+    private void RotateObject()
     {
-        rotationValue += Time.deltaTime * rotationSpeed;
-        var rotation = Quaternion.Euler(0.0f, 0.0f, rotationValue);
-        transform.rotation = rotation;
+        transform.Rotate(xAngle, yAngle, zAngle, Space.Self);
     }
 }

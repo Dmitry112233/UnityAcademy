@@ -1506,8 +1506,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scaleLimit: 22
-  speed: 10
-  startScale: 5
+  scaleSpeed: {x: 1, y: 1, z: 1}
 --- !u!1 &7759844063479414999
 GameObject:
   m_ObjectHideFlags: 0

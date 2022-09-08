@@ -4,29 +4,24 @@ public class Scaler : MonoBehaviour
 {
     [SerializeField]
     private float scaleLimit = 30.0f;
-    [SerializeField]
-    private float speed = 10.0f;
-    [SerializeField]
-    private float startScale = 5.0f;
-
-    private float scaleValue = 0.0f;
     
+    [SerializeField]
+    private Vector3 scaleSpeed = new (0.01f, 0.01f, 0.01f);
+
     void Start()
     {
-        
     }
 
     void Update()
     {
-        Move();
+        Scale();
     }
 
-    private void Move() 
+    private void Scale() 
     {
-        scaleValue += Time.deltaTime * speed;
-        if(scaleValue > startScale && scaleValue < scaleLimit)
+        if(transform.localScale.x < scaleLimit) 
         {
-            transform.localScale = new Vector3(scaleValue, scaleValue, scaleValue);
+            transform.localScale += scaleSpeed;
         }
     }
 }

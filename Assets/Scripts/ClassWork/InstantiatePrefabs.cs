@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SnowGuyMovement : MonoBehaviour
+public class InstantiatePrefabs : MonoBehaviour
 {
     public GameObject[] prefab;
 

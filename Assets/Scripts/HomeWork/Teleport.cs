@@ -3,35 +3,26 @@ using UnityEngine;
 public class Teleport : MonoBehaviour
 {
     [SerializeField]
-    private float timeToTeleport = 2.0f;
+    private Vector3 min = new Vector3(-30.0f, 0.0f, -30.0f);
 
-    private float timer;
+    [SerializeField]
+    private Vector3 max = new Vector3(30.0f, 30.0f, 30.0f);
 
-    private float xMin = -30.0f;
-    private float xMax = 30.0f;
-    private float zMin = -30.0f;
-    private float zMax = 30.0f;
-    private float yMin = 0.0f;
-    private float yMax = 30.0f;
+    [SerializeField]
+    private int teleportTimer = 2;
 
     void Start()
     {
-        timer = timeToTeleport;
+        InvokeRepeating("DoTeleport", teleportTimer, teleportTimer);
     }
 
     void Update()
     {
-        DoTeleport();
     }
 
-    private void DoTeleport() 
+    private void DoTeleport()
     {
-        timer += Time.deltaTime;
+        transform.position = new Vector3(Random.Range(min.x, max.x), Random.Range(min.y, max.y), Random.Range(min.z, max.z));
 
-        if(timer >= timeToTeleport) 
-        {
-            transform.position = new Vector3(Random.Range(xMin, xMax), Random.Range(yMin, yMax), Random.Range(zMin, zMax));
-            timer = 0.0f;
-        }
     }
 }
