@@ -111,9 +111,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e78ee487fb3e3cb479d200a1fa3404f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointA: {x: 1, y: 1, z: 1}
-  pointB: {x: -1, y: -1, z: -1}
-  speed: 10
-  distance: 20
-  angle: 0
-  radius: 15
+  pointA: {x: 0, y: 0, z: -27.85}
+  pointB: {x: 0, y: 20, z: -27.85}
+  speed: 0.5
