@@ -10,7 +10,7 @@ public class TogglesChangeText : MonoBehaviour
     void Start()
     {
         toggle = GetComponent<Toggle>();
-        displayText = transform.parent.parent.gameObject.transform.Find("DisplayText").gameObject.GetComponent<TextMeshProUGUI>();
+        displayText = transform.parent.parent.gameObject.transform.Find("DisplayText")?.gameObject.GetComponent<TextMeshProUGUI>();
 
         if (toggle != null && displayText != null)
         {

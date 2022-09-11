@@ -14,7 +14,7 @@ public class MainMenuButtons : MonoBehaviour
         button = GetComponent<Button>();
         mainCanvas = transform.parent.gameObject;
 
-        if (button != null) 
+        if (button != null && mainCanvas != null) 
         {
             button.onClick.AddListener(() => 
             {
@@ -22,8 +22,8 @@ public class MainMenuButtons : MonoBehaviour
                 canvasToOpen.SetActive(true);
                 if (canvasToOpen.name.Equals("ButtonsCanvas")) 
                 {
-                    canvasToOpen.transform.Find("One").gameObject.SetActive(true);
-                    canvasToOpen.transform.Find("Two").gameObject.SetActive(true);
+                    canvasToOpen.transform.Find("One")?.gameObject.SetActive(true);
+                    canvasToOpen.transform.Find("Two")?.gameObject.SetActive(true);
                 }
             });
         }

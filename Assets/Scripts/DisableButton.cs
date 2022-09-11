@@ -10,10 +10,10 @@ public class DisableButton : MonoBehaviour
     void Start()
     {
         button = GetComponent<Button>();
-        buttonOne = transform.parent.gameObject.transform.Find("One").gameObject;
-        buttonTwo = transform.parent.gameObject.transform.Find("Two").gameObject;
+        buttonOne = transform.parent.gameObject.transform.Find("One")?.gameObject;
+        buttonTwo = transform.parent.gameObject.transform.Find("Two")?.gameObject;
 
-        if (button != null)
+        if (button != null && buttonOne != null && buttonTwo != null)
         {
             button.onClick.AddListener(() =>
             {

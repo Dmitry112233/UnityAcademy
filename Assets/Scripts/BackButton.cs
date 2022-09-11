@@ -16,7 +16,7 @@ public class BackButton : MonoBehaviour
         button = GetComponent<Button>();
         currentCanvas = transform.parent.gameObject;
 
-        if (button != null)
+        if (button != null && currentCanvas != null)
         {
             button.onClick.AddListener(() =>
             {

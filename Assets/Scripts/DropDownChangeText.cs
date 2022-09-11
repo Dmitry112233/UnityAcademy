@@ -11,7 +11,7 @@ public class DropDownChangeText : MonoBehaviour
     void Start()
     {
         dropdown = GetComponent<TMP_Dropdown>();
-        displayText = transform.parent.gameObject.transform.Find("DisplayText").gameObject.GetComponent<TextMeshProUGUI>();
+        displayText = transform.parent.gameObject.transform.Find("DisplayText")?.gameObject.GetComponent<TextMeshProUGUI>();
 
         if (dropdown != null && displayText != null)
         {

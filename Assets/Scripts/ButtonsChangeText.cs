@@ -10,7 +10,7 @@ public class ButtonsChangeText : MonoBehaviour
     void Start()
     {
         button = GetComponent<Button>();
-        displayText = transform.parent.gameObject.transform.Find("DisplayText").gameObject.GetComponent<TextMeshProUGUI>();
+        displayText = transform.parent.gameObject.transform.Find("DisplayText")?.gameObject.GetComponent<TextMeshProUGUI>();
 
         if (button != null && displayText != null)
         {
