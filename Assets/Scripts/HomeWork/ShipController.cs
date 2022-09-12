@@ -85,14 +85,6 @@ public class ShipController : MonoBehaviour
             if (touch.phase == TouchPhase.Moved)
             {
                 ships[activeShip].transform.Rotate(0, touch.deltaPosition.x / 3, 0, Space.Self);
-                /*if (touch.deltaPosition.x < 0)
-                {
-                    ships[activeShip].transform.Rotate(0, 3, 0, Space.Self);
-                }
-                else
-                {
-                    ships[activeShip].transform.Rotate(0, -3, 0, Space.Self);
-                }*/
             }
         }
     }
