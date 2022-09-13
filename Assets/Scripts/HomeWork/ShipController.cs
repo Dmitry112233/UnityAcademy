@@ -6,6 +6,7 @@ public class ShipController : MonoBehaviour
 {
     [SerializeField]
     private List<GameObject> ships;
+    private int activeShip;
 
     [SerializeField]
     private Button buttonRight;
@@ -20,7 +21,37 @@ public class ShipController : MonoBehaviour
     [SerializeField]
     private Button buttonGreen;
 
-    private int activeShip;
+    [SerializeField]
+    private Button buttonViewUp;
+    [SerializeField]
+    private Button buttonViewDown;
+    [SerializeField]
+    private Button buttonViewFace;
+    [SerializeField]
+    private Button buttonViewLeft;
+
+    [SerializeField]
+    private GameObject shipCamera;
+
+    [SerializeField]
+    private Vector3 cameraPositionUp;
+    [SerializeField]
+    private Vector3 cameraRotationUp;
+
+    [SerializeField]
+    private Vector3 cameraPositionDown;
+    [SerializeField]
+    private Vector3 cameraRotationDown;
+
+    [SerializeField]
+    private Vector3 cameraPositionFace;
+    [SerializeField]
+    private Vector3 cameraRotationFace;
+
+    [SerializeField]
+    private Vector3 cameraPositionLeft;
+    [SerializeField]
+    private Vector3 cameraRotationLeft;
 
     void Start()
     {
@@ -30,49 +61,51 @@ public class ShipController : MonoBehaviour
 
         buttonRight.onClick.AddListener(() =>
         {
-
             ships[activeShip].SetActive(false);
-            if (activeShip != ships.Count - 1)
-            {
-                activeShip++;
-                ships[activeShip].SetActive(true);
-            }
-            else
-            {
-                activeShip = 0;
-                ships[activeShip].SetActive(true);
-            }
+            activeShip = activeShip != (ships.Count - 1) ? activeShip+1 : 0;
+            ships[activeShip].SetActive(true);
         });
-
+          
         buttonLeft.onClick.AddListener(() =>
         {
-
             ships[activeShip].SetActive(false);
-            if (activeShip != 0)
-            {
-                activeShip--;
-                ships[activeShip].SetActive(true);
-            }
-            else
-            {
-                activeShip = ships.Count - 1;
-                ships[activeShip].SetActive(true);
-            }
+            activeShip = activeShip != 0 ? activeShip - 1 : ships.Count - 1;
+            ships[activeShip].SetActive(true);
         });
 
         buttonRed.onClick.AddListener(() =>
         {
-            ships[activeShip].GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+            SetShipColor(Color.red);
         });
 
         buttonBlue.onClick.AddListener(() =>
         {
-            ships[activeShip].GetComponent<Renderer>().material.SetColor("_Color", Color.blue);
+            SetShipColor(Color.blue);
         });
 
         buttonGreen.onClick.AddListener(() =>
         {
-            ships[activeShip].GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+            SetShipColor(Color.green);
+        });
+
+        buttonViewLeft.onClick.AddListener(() => 
+        {
+            SetShipCameraPositionColor(cameraPositionLeft, cameraRotationLeft);
+        });
+
+        buttonViewFace.onClick.AddListener(() =>
+        {
+            SetShipCameraPositionColor(cameraPositionFace, cameraRotationFace);
+        });
+
+        buttonViewUp.onClick.AddListener(() =>
+        {
+            SetShipCameraPositionColor(cameraPositionUp, cameraRotationUp);
+        });
+
+        buttonViewDown.onClick.AddListener(() =>
+        {
+            SetShipCameraPositionColor(cameraPositionDown, cameraRotationDown);
         });
     }
 
@@ -87,5 +120,16 @@ public class ShipController : MonoBehaviour
                 ships[activeShip].transform.Rotate(0, touch.deltaPosition.x / 3, 0, Space.Self);
             }
         }
+    }
+
+    private void SetShipColor(Color color) 
+    {
+        ships[activeShip].GetComponent<Renderer>().material.SetColor("_Color", color);
+    }
+
+    private void SetShipCameraPositionColor(Vector3 position, Vector3 rotation)
+    {
+        shipCamera.transform.position = position;
+        shipCamera.transform.rotation = Quaternion.Euler(rotation);
     }
 }
