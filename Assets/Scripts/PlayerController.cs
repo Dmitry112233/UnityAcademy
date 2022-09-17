@@ -1,18 +1,24 @@
 using UnityEngine;
 
-public class CubeController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private float movementSpeed;
 
     [SerializeField]
-    private float bulletSpeed;
-
-    [SerializeField]
     private float rotationSpeed;
 
     [SerializeField]
+    private GameObject allBullet;
+
+    [SerializeField]
     private GameObject bulletPrefab;
+
+    [SerializeField]
+    private float bulletSpeed;
+
+    [SerializeField]
+    private Transform bulletInitPosition;
 
     private Rigidbody myBody;
 
@@ -31,7 +37,6 @@ public class CubeController : MonoBehaviour
         }
 
         float forwardForce = Input.GetAxis("Vertical") * movementSpeed;
-        Debug.Log(Input.GetAxis("Vertical"));
 
         if (forwardForce != 0.0f)
         {
@@ -40,8 +45,11 @@ public class CubeController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            var bullet = Instantiate(bulletPrefab, transform.position + transform.forward, Quaternion.identity);
-            bullet.GetComponent<Rigidbody>().AddForce((transform.forward + transform.up) * bulletSpeed, ForceMode.Impulse);
+            var direction = (transform.forward + transform.up);
+            direction.Normalize();
+            var bullet = Instantiate(bulletPrefab, bulletInitPosition.position, Quaternion.identity);
+            bullet.transform.SetParent(allBullet.transform);
+            bullet.GetComponent<Rigidbody>().AddForce(direction * bulletSpeed, ForceMode.Impulse);
         }
     }
 }
