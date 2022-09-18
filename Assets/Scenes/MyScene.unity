@@ -4174,8 +4174,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7edd453bc79529942ab03f3170c1fbb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 0.2
-  rotationSpeed: 1
+  movementSpeed: 5
+  rotationSpeed: 2
   allProjectiles: {fileID: 476201173}
   projectilePrefab: {fileID: 7441499303493309032, guid: 02f417a5e45b6be4fbe421a4f7c2f924, type: 3}
   projectileInitPosition: {fileID: 68592952}
