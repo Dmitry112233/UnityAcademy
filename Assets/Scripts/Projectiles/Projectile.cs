@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    public float speed = 10;
     public float destroyDelay = 3;
 
     protected IEnumerator WaitAndDestroy()

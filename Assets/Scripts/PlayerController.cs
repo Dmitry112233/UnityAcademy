@@ -15,9 +15,6 @@ public class PlayerController : MonoBehaviour
     private GameObject bulletPrefab;
 
     [SerializeField]
-    private float bulletSpeed;
-
-    [SerializeField]
     private Transform bulletInitPosition;
 
     private Rigidbody myBody;
@@ -45,11 +42,35 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            var direction = (transform.forward + transform.up);
-            direction.Normalize();
-            var bullet = Instantiate(bulletPrefab, bulletInitPosition.position, Quaternion.identity);
-            bullet.transform.SetParent(allBullet.transform);
-            bullet.GetComponent<Rigidbody>().AddForce(direction * bulletSpeed, ForceMode.Impulse);
+            switch (bulletPrefab.GetComponent<Projectile>().GetType().ToString()) 
+            {
+                case "Grenade":
+                    ThrowWithAngle();
+                    break;
+                case "TennisBall":
+                    ThrowWithAngle();
+                    break;
+                case "Bullet":
+                    ThrowForward();
+                    break;
+            }
         }
+    }
+
+    private void ThrowWithAngle() 
+    {
+        //Todo with angle take z from vector forward;
+        var direction = (transform.forward + transform.up);
+        direction.Normalize();
+        var bullet = Instantiate(bulletPrefab, bulletInitPosition.position, Quaternion.identity);
+        bullet.transform.SetParent(allBullet.transform);
+        bullet.GetComponent<Rigidbody>()?.AddForce(direction * bullet.GetComponent<Projectile>().speed, ForceMode.Impulse);
+    }
+
+    private void ThrowForward()
+    {
+        var bullet = Instantiate(bulletPrefab, bulletInitPosition.position, Quaternion.identity);
+        bullet.transform.SetParent(allBullet.transform);
+        bullet.GetComponent<Rigidbody>()?.AddForce(transform.forward * bullet.GetComponent<Projectile>().speed, ForceMode.Impulse);
     }
 }
