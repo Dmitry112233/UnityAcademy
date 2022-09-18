@@ -129,4 +129,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.07
   destroyDelay: 10
-  decreaseBounceValue: 0.1
+  decreaseBounceValue: 0.15

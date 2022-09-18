@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            //change to tags add MyTags class
             switch (bulletPrefab.GetComponent<Projectile>().GetType().ToString()) 
             {
                 case "Grenade":

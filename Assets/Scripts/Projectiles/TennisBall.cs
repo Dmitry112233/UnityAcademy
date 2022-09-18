@@ -21,7 +21,7 @@ public class TennisBall : Projectile
 
     private void RecalculateBallBounce()
     {
-        if(currentCollisionNumber != numberOfCollisions) 
+        if (currentCollisionNumber != numberOfCollisions) 
         {
             if (myCollider.material.bounciness >= decreaseBounceValue) 
             {
@@ -32,6 +32,10 @@ public class TennisBall : Projectile
                 myCollider.material.bounciness = 0.0f;
             }
             currentCollisionNumber = numberOfCollisions;
+        }
+        if(myCollider.material.bounciness == 0.0f) 
+        {
+            myCollider.material.bounciness = 1.0f;
         }
     }
 
