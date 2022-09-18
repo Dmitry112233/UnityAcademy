@@ -15,8 +15,11 @@ public class PlayerController : MonoBehaviour
     private Rigidbody myBody;
 
     private float sideForce = 0.0f;
+    
     private float forwardForce = 0.0f;
+    
     private bool IsThrowWithAngle;
+    
     private bool IsThrowForward;
 
     void Start()

@@ -8,7 +8,7 @@ public class TennisBall : Projectile
 
     private int numberOfCollisions = 0;
     
-    Collider myCollider;
+    private Collider myCollider;
 
     void Start()
     {
