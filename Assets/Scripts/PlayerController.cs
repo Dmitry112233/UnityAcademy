@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
         }
         if (forwardForce != 0.0f)
         {
-            myBody.MovePosition(transform.position + transform.forward * forwardForce);
+            myBody.MovePosition(transform.position + transform.forward * forwardForce * Time.fixedDeltaTime);
         }
     }
 
