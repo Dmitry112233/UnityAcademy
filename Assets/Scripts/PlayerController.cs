@@ -2,22 +2,22 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
-    private float movementSpeed;
+    public float movementSpeed;
 
-    [SerializeField]
-    private float rotationSpeed;
+    public float rotationSpeed;
 
-    [SerializeField]
-    private GameObject allBullet;
+    public GameObject allProjectiles;
 
-    [SerializeField]
-    private GameObject bulletPrefab;
+    public GameObject projectilePrefab;
 
-    [SerializeField]
-    private Transform bulletInitPosition;
+    public Transform projectileInitPosition;
 
     private Rigidbody myBody;
+
+    private float sideForce = 0.0f;
+    private float forwardForce = 0.0f;
+    private bool IsThrowWithAngle;
+    private bool IsThrowForward;
 
     void Start()
     {
@@ -26,52 +26,67 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        float sideForce = Input.GetAxis("Horizontal") * rotationSpeed;
+        ReadKeyBoard();
+    }
 
-        if (sideForce != 0.0f)
-        {
-            myBody.angularVelocity = new Vector3(0.0f, sideForce, 0.0f);
-        }
+    private void FixedUpdate()
+    {
+        Move();
+        Shoot();
+    }
 
-        float forwardForce = Input.GetAxis("Vertical") * movementSpeed;
-
-        if (forwardForce != 0.0f)
-        {
-            myBody.velocity = myBody.transform.forward * forwardForce;
-        }
+    private void ReadKeyBoard() 
+    {
+        print(Input.GetAxis("Horizontal"));
+        sideForce = Input.GetAxis("Horizontal") * rotationSpeed;
+        forwardForce = Input.GetAxis("Vertical") * movementSpeed;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            //change to tags add MyTags class
-            switch (bulletPrefab.GetComponent<Projectile>().GetType().ToString()) 
+            switch (projectilePrefab.tag)
             {
                 case "Grenade":
-                    ThrowWithAngle();
+                    IsThrowWithAngle = true;
                     break;
                 case "TennisBall":
-                    ThrowWithAngle();
+                    IsThrowWithAngle = true;
                     break;
                 case "Bullet":
-                    ThrowForward();
+                    IsThrowForward = true;
                     break;
             }
         }
     }
 
-    private void ThrowWithAngle() 
+    private void Move()
     {
-        //Todo with angle take z from vector forward;
-        var direction = (transform.forward + transform.up);
-        direction.Normalize();
-        var bullet = Instantiate(bulletPrefab, bulletInitPosition.position, Quaternion.identity);
-        bullet.transform.SetParent(allBullet.transform);
-        bullet.GetComponent<Rigidbody>()?.AddForce(direction * bullet.GetComponent<Projectile>().speed, ForceMode.Impulse);
+        if (sideForce != 0.0f)
+        {
+            myBody.angularVelocity = new Vector3(0.0f, sideForce, 0.0f);
+        }
+        if (forwardForce != 0.0f)
+        {
+            myBody.MovePosition(transform.position + transform.forward * forwardForce * Time.fixedDeltaTime);
+        }
     }
 
-    private void ThrowForward()
+    private void Shoot() 
     {
-        var bullet = Instantiate(bulletPrefab, bulletInitPosition.position, Quaternion.identity);
-        bullet.transform.SetParent(allBullet.transform);
-        bullet.GetComponent<Rigidbody>()?.AddForce(transform.forward * bullet.GetComponent<Projectile>().speed, ForceMode.Impulse);
+        if (IsThrowWithAngle) 
+        {
+            var direction = (transform.forward + transform.up);
+            direction.Normalize();
+            var bullet = Instantiate(projectilePrefab, projectileInitPosition.position, Quaternion.identity);
+            bullet.transform.SetParent(allProjectiles.transform);
+            bullet.GetComponent<Rigidbody>()?.AddForce(direction * bullet.GetComponent<Projectile>().speed, ForceMode.Impulse);
+            IsThrowWithAngle = false;
+        }
+        if (IsThrowForward) 
+        {
+            var bullet = Instantiate(projectilePrefab, projectileInitPosition.position, Quaternion.identity);
+            bullet.transform.SetParent(allProjectiles.transform);
+            bullet.GetComponent<Rigidbody>()?.AddForce(transform.forward * bullet.GetComponent<Projectile>().speed, ForceMode.Impulse);
+            IsThrowForward = false;
+        }
     }
 }

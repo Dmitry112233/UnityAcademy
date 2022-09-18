@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class TennisBall : Projectile
 {
-    public float decreaseBounceValue = 0.09f;
+    public float decreaseBounceValue = 0.0f;
 
     private int currentCollisionNumber = 0;
+
     private int numberOfCollisions = 0;
+    
     Collider myCollider;
 
     void Start()

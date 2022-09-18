@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class Grenade : Projectile
 {
-    [SerializeField]
-    private float radius;
+    public float radius;
 
-    [SerializeField]
-    private float force;
+    public float force;
 
     void Start()
     {
