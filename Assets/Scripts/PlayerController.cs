@@ -40,7 +40,6 @@ public class PlayerController : MonoBehaviour
 
     private void ReadKeyBoard() 
     {
-        print(Input.GetAxis("Horizontal"));
         sideForce = Input.GetAxis("Horizontal") * rotationSpeed;
         forwardForce = Input.GetAxis("Vertical") * movementSpeed;
 
