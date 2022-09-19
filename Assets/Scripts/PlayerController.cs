@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
 
     public Transform projectileInitPosition;
 
+    public float upVectorY = 1.0f;
+
     private Rigidbody myBody;
 
     private float sideForce = 0.0f;
@@ -76,7 +78,8 @@ public class PlayerController : MonoBehaviour
     {
         if (IsThrowWithAngle) 
         {
-            var direction = (transform.forward + transform.up);
+            var upVector = new Vector3(0.0f, upVectorY, 0.0f);
+            var direction = (transform.forward + upVector);
             direction.Normalize();
             var bullet = Instantiate(projectilePrefab, projectileInitPosition.position, Quaternion.identity);
             bullet.transform.SetParent(allProjectiles.transform);
