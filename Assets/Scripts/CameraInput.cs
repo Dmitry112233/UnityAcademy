@@ -21,19 +21,7 @@ public class CameraInput : MonoBehaviour
 
                 if (Input.touchCount > 0)
                 {
-                    if(Input.touches[0].position.x > Screen.width / 2f) 
-                    {
-                        return Input.touches[0].deltaPosition.x / TouchSensitivity_x;
-                    }
-                    break;
-                }
-                if (Input.touchCount > 1)
-                {
-                    if (Input.touches[1].position.x > Screen.width / 2f)
-                    {
-                        return Input.touches[1].deltaPosition.x / TouchSensitivity_x;
-                    }
-                    break;
+                    return Input.touches[0].deltaPosition.x / TouchSensitivity_x;
                 }
                 else
                 {
@@ -43,19 +31,7 @@ public class CameraInput : MonoBehaviour
             case "Mouse Y":
                 if (Input.touchCount > 0)
                 {
-                    if (Input.touches[0].position.y > Screen.width / 2f)
-                    {
-                        return Input.touches[0].deltaPosition.y / TouchSensitivity_y;
-                    }
-                    break;
-                }
-                if (Input.touchCount > 1)
-                {
-                    if (Input.touches[1].position.y > Screen.width / 2f)
-                    {
-                        return Input.touches[1].deltaPosition.y / TouchSensitivity_y;
-                    }
-                    break;
+                    return Input.touches[0].deltaPosition.y / TouchSensitivity_y;
                 }
                 else
                 {
