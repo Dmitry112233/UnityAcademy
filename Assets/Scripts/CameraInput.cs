@@ -1,4 +1,5 @@
 using Cinemachine;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraInput : MonoBehaviour
@@ -21,7 +22,8 @@ public class CameraInput : MonoBehaviour
 
                 if (Input.touchCount > 0)
                 {
-                    return Input.touches[0].deltaPosition.x / TouchSensitivity_x;
+                    var touch = new List<Touch>(Input.touches).Find(x => x.position.x > Screen.width / 2);
+                    return touch.deltaPosition.x / TouchSensitivity_x;
                 }
                 else
                 {
@@ -31,7 +33,8 @@ public class CameraInput : MonoBehaviour
             case "Mouse Y":
                 if (Input.touchCount > 0)
                 {
-                    return Input.touches[0].deltaPosition.y / TouchSensitivity_y;
+                    var touch = new List<Touch>(Input.touches).Find(x => x.position.x > Screen.width / 2);
+                    return touch.deltaPosition.y / TouchSensitivity_y;
                 }
                 else
                 {
