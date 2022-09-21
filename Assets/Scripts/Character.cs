@@ -40,8 +40,9 @@ public class Character : MonoBehaviour
 
         float horizontal = joystick.Horizontal;
 
-        Vector3 movement = new Vector3(horizontal * speed, ySpeed, vertical * speed);
-        Controller.Move(transform.TransformDirection(movement) * Time.deltaTime);
+        Vector3 movement = new Vector3(horizontal, ySpeed, vertical);
+        movement.Normalize();
+        Controller.Move(transform.TransformDirection(movement)* speed * Time.deltaTime);
     }
 
     private void Rotate()
