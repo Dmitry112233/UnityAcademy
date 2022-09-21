@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -54,22 +55,8 @@ public class Character : MonoBehaviour
 
         if (Input.touchCount > 0)
         {
-            Touch touch = Input.GetTouch(0);
-
-            if (touch.position.x > Screen.width / 2f)
-            {
-                touch = Input.GetTouch(0);
-            }
-
-            else if (Input.touchCount > 1 && Input.GetTouch(1).position.x > Screen.width / 2f)
-            {
-                touch = Input.GetTouch(1);
-            }
-            if (touch.position.x > Screen.width / 2f && touch.phase == TouchPhase.Moved)
-            {
-                touchX = touch.deltaPosition.x / 3.0f * rotationSpeed * Time.deltaTime;
-            }
-
+            var touch = new List<Touch>(Input.touches).Find(x => x.position.x > Screen.width / 2);
+            touchX = touch.deltaPosition.x / 3.0f * rotationSpeed * Time.deltaTime;
             Controller.transform.Rotate(Vector3.up, touchX * rotationSpeed * Time.deltaTime);
         }
     }
