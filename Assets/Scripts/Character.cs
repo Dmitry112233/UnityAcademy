@@ -49,12 +49,13 @@ public class Character: MonoBehaviour
             {
                 touch = Input.GetTouch(0);
             }
-            else if (Input.touchCount >1 && Input.GetTouch(1).position.x > Screen.width / 2f)
+
+            else if (Input.touchCount > 1 && Input.GetTouch(1).position.x > Screen.width / 2f)
             {
                 touch = Input.GetTouch(1);
             }
 
-            if (touch.phase == TouchPhase.Moved)
+            if (touch.position.x > Screen.width / 2f && touch.phase == TouchPhase.Moved)
             {
                touchX = touch.deltaPosition.x / 3.0f * rotationSpeed * Time.deltaTime;
             }
