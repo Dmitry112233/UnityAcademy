@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Character: MonoBehaviour
+public class Character : MonoBehaviour
 {
 
     public Button jumpButton;
@@ -20,7 +20,7 @@ public class Character: MonoBehaviour
 
     void Start()
     {
-        jumpButton.onClick.AddListener(() => 
+        jumpButton.onClick.AddListener(() =>
         {
             isJump = true;
         });
@@ -30,22 +30,29 @@ public class Character: MonoBehaviour
     void Update()
     {
         Move();
+        Rotate();
         Jump();
     }
 
-    private void Move() 
+    private void Move()
     {
         float vertical = joystick.Vertical;
 
         float horizontal = joystick.Horizontal;
 
+        Vector3 movement = new Vector3(horizontal * speed, ySpeed, vertical * speed);
+        Controller.Move(transform.TransformDirection(movement) * Time.deltaTime);
+    }
+
+    private void Rotate()
+    {
         float touchX = 0.0f;
 
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
 
-            if (touch.position.x > Screen.width / 2f) 
+            if (touch.position.x > Screen.width / 2f)
             {
                 touch = Input.GetTouch(0);
             }
@@ -54,17 +61,13 @@ public class Character: MonoBehaviour
             {
                 touch = Input.GetTouch(1);
             }
-
             if (touch.position.x > Screen.width / 2f && touch.phase == TouchPhase.Moved)
             {
-               touchX = touch.deltaPosition.x / 3.0f * rotationSpeed * Time.deltaTime;
+                touchX = touch.deltaPosition.x / 3.0f * rotationSpeed * Time.deltaTime;
             }
+
+            Controller.transform.Rotate(Vector3.up, touchX * rotationSpeed * Time.deltaTime);
         }
-
-        Vector3 movement = new Vector3(horizontal * speed, ySpeed, vertical * speed);
-
-        Controller.Move(transform.TransformDirection(movement) * Time.deltaTime);
-        Controller.transform.Rotate(Vector3.up, touchX);
     }
 
     private void Jump()

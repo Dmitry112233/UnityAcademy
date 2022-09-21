@@ -12,31 +12,31 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        Move();
+        RotateVertical();
     }
 
-    private void Move() 
+    private void RotateVertical()
     {
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
 
-            if (Input.touchCount == 2)
+            if (touch.position.x > Screen.width / 2f)
+            {
+                touch = Input.GetTouch(0);
+            }
+            else if (Input.touchCount > 1 && Input.GetTouch(1).position.x > Screen.width / 2f)
             {
                 touch = Input.GetTouch(1);
             }
-
-            if (touch.phase == TouchPhase.Moved)
+            if (touch.phase == TouchPhase.Moved && touch.position.x > Screen.width / 2f)
             {
-                if (touch.position.x > Screen.width / 2f)
-                {
-                    float mouseY = touch.deltaPosition.y / 3.0f * rotationSpeed * Time.deltaTime;
+                float mouseY = touch.deltaPosition.y / 3.0f * rotationSpeed * Time.deltaTime;
 
-                    xRotation -= mouseY;
-                    xRotation = Mathf.Clamp(xRotation, -45f, 45f);
+                xRotation -= mouseY;
+                xRotation = Mathf.Clamp(xRotation, 0f, 40f);
 
-                    transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-                }
+                transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
             }
         }
     }
