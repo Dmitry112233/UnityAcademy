@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -41,8 +42,10 @@ public class Character : MonoBehaviour
         float horizontal = joystick.Horizontal;
 
         Vector3 movement = new Vector3(horizontal, ySpeed, vertical);
+        float magnitude = Math.Clamp(movement.magnitude, 0.0f, 1.0f);
+
         movement.Normalize();
-        Controller.Move(transform.TransformDirection(movement)* speed * Time.deltaTime);
+        Controller.Move(transform.TransformDirection(movement) * magnitude * speed * Time.deltaTime);
     }
 
     private void Rotate()
