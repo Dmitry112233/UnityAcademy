@@ -11,6 +11,7 @@ public class Character : MonoBehaviour
     public float speed = 10.0f;
     public float jumpSpeed = 20.0f;
     public float rotationSpeed = 5.0f;
+    public Transform transformCamera;
 
     private float ySpeed;
     private bool isJump;
@@ -31,46 +32,29 @@ public class Character : MonoBehaviour
     void Update()
     {
         Move();
-        Rotate();
         Jump();
     }
 
     private void Move()
     {
         float vertical = joystick.Vertical;
-
         float horizontal = joystick.Horizontal;
 
-        Vector3 movement = new Vector3(horizontal, ySpeed, vertical);
-        float magnitude = Math.Clamp(movement.magnitude, 0.0f, 1.0f);
+        Vector3 movementDirection = new Vector3(horizontal, 0, vertical);
+        float magnitude = Math.Clamp(movementDirection.magnitude, 0.0f, 1.0f);
+        movementDirection = Quaternion.AngleAxis(transformCamera.rotation.eulerAngles.y, Vector3.up) * movementDirection;
 
-        movement.Normalize();
-        Controller.Move(transform.TransformDirection(movement) * magnitude * speed * Time.deltaTime);
-    }
+        Vector3 velocity = movementDirection * magnitude * speed;
+        velocity.y = ySpeed;
 
-    private void Rotate()
-    {
-        float touchX = 0.0f;
+        movementDirection.Normalize();
 
-        if (Input.touchCount > 0)
+        Controller.Move(velocity * Time.deltaTime);
+
+        if(movementDirection != Vector3.zero) 
         {
-            Touch touch = Input.GetTouch(0);
-
-            if (touch.position.x > Screen.width / 2f)
-            {
-                touch = Input.GetTouch(0);
-            }
-
-            else if (Input.touchCount > 1 && Input.GetTouch(1).position.x > Screen.width / 2f)
-            {
-                touch = Input.GetTouch(1);
-            }
-            if (touch.position.x > Screen.width / 2f && touch.phase == TouchPhase.Moved)
-            {
-                touchX = touch.deltaPosition.x / 3.0f * rotationSpeed * Time.deltaTime;
-            }
-
-            Controller.transform.Rotate(Vector3.up, touchX * rotationSpeed * Time.deltaTime);
+            Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
+            Controller.transform.rotation = Quaternion.RotateTowards(Controller.transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
         }
     }
 
