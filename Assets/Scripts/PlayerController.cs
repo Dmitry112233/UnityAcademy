@@ -41,7 +41,17 @@ public class PlayerController : MonoBehaviour
     {
         StartCoroutine(PlaySpawn());
         isAlive = true;
-        animator.fireEvents = false;
+        //animator.fireEvents = false;
+    }
+
+    public void MeleeAttackStart(int num) 
+    {
+        Debug.Log(num);
+    }
+
+    public void MeleeAttackEnd(int num)
+    {
+        Debug.Log(num);
     }
 
     public void SetAnimations(AnimatorOverrideController overrideController) 
