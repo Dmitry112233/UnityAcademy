@@ -25,11 +25,16 @@ public class Character : MonoBehaviour
     private void Move()
     {
         float vertical = Input.GetAxis("Vertical");
-
         float horizontal = Input.GetAxis("Horizontal");
+        Debug.Log("Vertical = " + vertical);
+        Debug.Log("Horizontal = " + horizontal);
+
 
         Vector3 movement = new Vector3(horizontal, 0, vertical);
         float magnitude = Math.Clamp(movement.magnitude, 0.0f, 1.0f);
+
+        Debug.Log("Magnitude = " + magnitude);
+
 
         movement.Normalize();
         Controller.Move(transform.TransformDirection(movement) * magnitude * speed * Time.deltaTime);
@@ -38,7 +43,6 @@ public class Character : MonoBehaviour
     private void Rotate()
     {
         float horizontal = Input.GetAxis("Mouse X");
-        print(horizontal);
         Controller.transform.Rotate(Vector3.up, horizontal * rotationSpeed * Time.deltaTime);
     }
 }
