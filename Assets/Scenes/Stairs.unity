@@ -1406,6 +1406,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1075590906, guid: 8f1eec2bccf12854ab413acd0ff8ac63, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8685528655287523018, guid: 8f1eec2bccf12854ab413acd0ff8ac63, type: 3}
       propertyPath: m_Name
       value: StairsChunkV2
