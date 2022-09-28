@@ -1,16 +1,20 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Character : MonoBehaviour
 {
     public float speed = 10.0f;
     public float rotationSpeed = 5.0f;
 
+    private float gravity = -9.81f;
+    private float ySpeed;
+
     CharacterController controller;
+    public AudioSource audioSource;
+    private AudioSource breath;
 
     public CharacterController Controller { get { return controller = controller ?? GetComponent<CharacterController>(); } }
+    public AudioSource Breath { get { return breath = breath ?? GetComponent<AudioSource>(); } }
 
     void Start()
     {
@@ -26,18 +30,31 @@ public class Character : MonoBehaviour
     {
         float vertical = Input.GetAxis("Vertical");
         float horizontal = Input.GetAxis("Horizontal");
-        Debug.Log("Vertical = " + vertical);
-        Debug.Log("Horizontal = " + horizontal);
 
+        ySpeed += gravity * Time.deltaTime;
+        if (Controller.isGrounded)
+        {
+            ySpeed = -0.5f;
+        }
 
-        Vector3 movement = new Vector3(horizontal, 0, vertical);
+            Vector3 movement = new Vector3(horizontal, ySpeed, vertical);
         float magnitude = Math.Clamp(movement.magnitude, 0.0f, 1.0f);
-
-        Debug.Log("Magnitude = " + magnitude);
-
 
         movement.Normalize();
         Controller.Move(transform.TransformDirection(movement) * magnitude * speed * Time.deltaTime);
+
+        if(horizontal != 0.0f || vertical != 0.0f) 
+        {
+            if (!audioSource.isPlaying) 
+            {
+                audioSource.Play();
+            }
+        }
+        if (!Breath.isPlaying)
+        {
+            Breath.Play();
+        }
+
     }
 
     private void Rotate()
