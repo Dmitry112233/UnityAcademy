@@ -6,8 +6,7 @@ public class StairsChunk : MonoBehaviour
     public Transform endPosition;
 
     void Start()
-    {
-        
+    {    
     }
 
     // Update is called once per frame

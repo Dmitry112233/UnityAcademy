@@ -37,7 +37,7 @@ public class Character : MonoBehaviour
             ySpeed = -0.5f;
         }
 
-            Vector3 movement = new Vector3(horizontal, ySpeed, vertical);
+        Vector3 movement = new Vector3(horizontal, ySpeed, vertical);
         float magnitude = Math.Clamp(movement.magnitude, 0.0f, 1.0f);
 
         movement.Normalize();

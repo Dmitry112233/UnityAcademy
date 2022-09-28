@@ -2492,6 +2492,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   beginPosition: {fileID: 8685528654458660775}
   endPosition: {fileID: 8685528655534751934}
+  positionTeleport: {fileID: 0}
 --- !u!1 &8685528655534751935
 GameObject:
   m_ObjectHideFlags: 0
