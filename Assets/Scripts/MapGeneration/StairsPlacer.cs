@@ -29,8 +29,8 @@ public class StairsPlacer : MonoBehaviour
     {
         StairsChunk newChunk = Instantiate(stairsPrefabs[Random.Range(0, stairsPrefabs.Length)]);
         newChunk.transform.position = spawnedChunks[spawnedChunks.Count - 1].transform.position;
-        newChunk.transform.SetParent(parent);
         newChunk.transform.position = newChunk.transform.position + new Vector3(0.0f, chunkDistance, 0.0f);
+        newChunk.transform.SetParent(parent);
         spawnedChunks.Add(newChunk);
 
         if(spawnedChunks.Count >= 3) 

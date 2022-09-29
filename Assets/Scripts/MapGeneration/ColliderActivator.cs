@@ -1,24 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
+using Assets.Scripts;
 using UnityEngine;
 
 public class ColliderActivator : MonoBehaviour
 {
     public GameObject colider;
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag(MyTags.Tags.Player))
         {
             colider.SetActive(true);
         }

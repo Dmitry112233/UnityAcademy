@@ -2,15 +2,14 @@ using UnityEngine;
 
 public class LightIntensity : MonoBehaviour
 {
+    public float intensity;
+
     private Light lamp;
     public Light Lamp { get { return lamp = lamp ?? GetComponent<Light>(); } }
 
     private float blinkTime = 0.5f;
     private float time = 0.0f;
-
-    void Start()
-    {   
-    }
+    private bool isSwitchedOn = false;
 
     void Update()
     {
@@ -18,7 +17,15 @@ public class LightIntensity : MonoBehaviour
         if(time >= blinkTime) 
         {
             time -= blinkTime;
-            Lamp.intensity = Random.Range(1, 9);
+            if (!isSwitchedOn) 
+            {
+                Lamp.intensity = intensity;
+            }
+            else 
+            {
+                Lamp.intensity = 0;
+            }
+            isSwitchedOn = !isSwitchedOn;
         }
     }
 }

@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using Assets.Scripts;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -9,7 +8,7 @@ public class BackgroundSounds : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player")) 
+        if (other.CompareTag(MyTags.Tags.Player)) 
         {
             snapshot.TransitionTo(0.5f);
         }
