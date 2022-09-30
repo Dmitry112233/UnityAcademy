@@ -1850,7 +1850,7 @@ GameObject:
   - component: {fileID: 535975026}
   - component: {fileID: 535975027}
   m_Layer: 0
-  m_Name: SNinja_nosword_jump 2
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
