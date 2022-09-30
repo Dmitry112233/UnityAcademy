@@ -1,19 +1,16 @@
+using Assets.Scripts;
 using UnityEngine;
 
 public class BackgroundResetPosition : MonoBehaviour
 {
-    public GameObject background;
-
-    void Start()
-    {
-        
-    }
+    public Transform background;
+    public BackgroundMove backgroundMove;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player")) 
+        if (collision.CompareTag(MyTags.Tags.Player)) 
         {
-            background.transform.position = background.GetComponent<BackgroundMove>().initPosition;
+            background.position = backgroundMove.InitPosition;
         }
     }
 }

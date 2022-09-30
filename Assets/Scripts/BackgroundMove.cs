@@ -1,18 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BackgroundMove : MonoBehaviour
 {
-    public Vector3 initPosition;
+    public float speed = 0.05f;
+    public PlayerController playerController;
+
+    public Vector3 InitPosition { get; private set; }
 
     void Start()
     {
-        initPosition = transform.position;
+        InitPosition = transform.position;
     }
 
     void Update()
     {
-        transform.position = transform.position + new Vector3(0.05f, 0f, 0f);
+        if (playerController.IsMovingRight) 
+        {
+            transform.position = transform.position + new Vector3(speed, 0f, 0f);
+        }
+        else 
+        {
+            transform.position = transform.position + new Vector3(speed, 0f, 0f) * -1;
+        }
     }
 }
