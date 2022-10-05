@@ -25,8 +25,7 @@ public class Stone : MonoBehaviour
             //var playerTransform = collision.GetComponent<Transform>();
 
             var playerBody = collision.GetComponent<Rigidbody2D>();
-
-            playerBody.AddForce(new Vector2(-1.0f, 1.0f) * 10, ForceMode2D.Impulse);
+            playerBody.AddForce(new Vector2(-1.0f, 1.0f) * 100, ForceMode2D.Impulse);
             
             /*var direction = Quaternion.AngleAxis(45.0f, playerTransform.forward) * playerTransform.right * -1;
             playerBody.AddForce(direction * 10, ForceMode2D.Impulse);*/

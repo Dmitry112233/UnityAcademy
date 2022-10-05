@@ -29,11 +29,20 @@ public class PlayerController : MonoBehaviour
         {
             _horizontal = Input.GetAxis("Horizontal");
             animator.SetFloat("speedX", Math.Abs(_horizontal));
+            
+            if(_horizontal > 0) 
+            {
+                _horizontal = 1;
+            } 
+            if(_horizontal < 0) 
+            {
+                _horizontal = -1;
+            }
+
             if (Input.GetKeyDown(KeyCode.W))
             {
                 Jump();
             }
-
         }
         else 
         {
@@ -45,7 +54,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isAlive) 
         {
-            _rb.velocity = new Vector2(_horizontal * speedX * Time.fixedDeltaTime, _rb.velocity.y);
+            _rb.AddForce(transform.right * _horizontal * speedX);
 
             if (_isJump)
             {
@@ -61,6 +70,7 @@ public class PlayerController : MonoBehaviour
             {
                 Flip();
             }
+
         }
     }
 
