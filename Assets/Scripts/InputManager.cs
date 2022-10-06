@@ -7,9 +7,7 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-
         Horizontal = Input.GetAxis("Horizontal");
         IsJump = Input.GetKeyDown(KeyCode.W);
-
     }
 }

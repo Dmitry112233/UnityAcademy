@@ -30,16 +30,9 @@ public class PlayerController : MonoBehaviour
     {
         if (isAlive) 
         {
-            animator.SetFloat("speedX", Math.Abs(InputManager.Horizontal));
-            
-            if (InputManager.IsJump)
-            {
-                Jump();
-            }
-            if(transform.position.y < yBoundarie) 
-            {
-                PlayerDie();
-            }
+            SetAnimatorSpeedX();
+            Jump();
+            CheckYPosition();
         }
         else 
         {
@@ -88,9 +81,12 @@ public class PlayerController : MonoBehaviour
 
     public void Jump()
     {
-        if (!isGround) return;
-        isJump = true;
-        jumpSound.Play();
+        if (InputManager.IsJump)
+        {
+            if (!isGround) return;
+            isJump = true;
+            jumpSound.Play();
+        }
     }
 
     public void PlayerDie()
@@ -101,6 +97,19 @@ public class PlayerController : MonoBehaviour
             transform.Rotate(transform.forward, 90.0f);
             animator.enabled = false;
         }
+    }
+
+    private void CheckYPosition() 
+    {
+        if (transform.position.y < yBoundarie)
+        {
+            PlayerDie();
+        }
+    }
+
+    private void SetAnimatorSpeedX() 
+    {
+        animator.SetFloat("speedX", Math.Abs(InputManager.Horizontal));
     }
 
     public IEnumerator Respawn()
