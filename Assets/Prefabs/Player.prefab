@@ -3594,8 +3594,9 @@ GameObject:
   - component: {fileID: 70242907774875010}
   - component: {fileID: 2033977269}
   - component: {fileID: 2152620308138334551}
+  - component: {fileID: 7806225627877931655}
   m_Layer: 3
-  m_Name: BURLY-MAN_1_swordsman
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3608,7 +3609,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1892420787937326}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: -4.15, y: -0.21, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3616,7 +3617,7 @@ Transform:
   - {fileID: 4372054120543010}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!50 &50891965311963048
 Rigidbody2D:
   serializedVersion: 4
@@ -3634,9 +3635,9 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!70 &70242907774875010
 CapsuleCollider2D:
@@ -3651,8 +3652,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.16817856, y: 0.7072799}
-  m_Size: {x: 1.1753006, y: 3.6342158}
+  m_Offset: {x: -0.02652359, y: 0.7466502}
+  m_Size: {x: 1.4586105, y: 3.5554752}
   m_Direction: 0
 --- !u!114 &2033977269
 MonoBehaviour:
@@ -3666,10 +3667,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 113eef7cb2a08ee4f8036372bf1439b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedX: 5
+  speedX: 10
   animator: {fileID: 95941530780404234}
-  playerModelTransform: {fileID: 4372054120543010}
   jumpSound: {fileID: 2152620308138334551}
+  respawnPosition: {fileID: 0}
+  resetEnemies: {fileID: 0}
+  isAlive: 1
 --- !u!82 &2152620308138334551
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3690,7 +3693,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 0.9119835
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -3766,6 +3769,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7806225627877931655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1892420787937326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58eea3c48947d1c41baffa4577a827dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1908168490475892
 GameObject:
   m_ObjectHideFlags: 0

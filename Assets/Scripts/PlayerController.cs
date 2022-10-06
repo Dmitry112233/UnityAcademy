@@ -4,44 +4,41 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float speedX = 200f;
-    [SerializeField] private Animator animator;
-    [SerializeField] private AudioSource jumpSound;
-    [SerializeField] private Transform respawnPosition;
-
-    private bool _isGround = false;
-    private bool _isJump = false;
-    private float _horizontal = 0f;
-    private bool _isFacingRight = true;
-
+    public float speedX = 200f;
+    public Animator animator;
+    public AudioSource jumpSound;
+    public Transform respawnPosition;
+    public ResetEnemies resetEnemies;
     public bool isAlive = true;
 
-    private Rigidbody2D _rb;
+    private bool isGround = false;
+    private bool isJump = false;
+    private bool isFacingRight = true;
+    private float yBoundarie = -35f;
+
+    private Rigidbody2D rigidBody;
+    private InputManager inputManager;
+
+    public InputManager InputManager { get { return inputManager = inputManager ?? GetComponent<InputManager>(); } }
+    private Rigidbody2D RigidBody { get { return rigidBody = rigidBody ?? GetComponent<Rigidbody2D>(); }}
 
     void Start()
     {
-        _rb = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
     {
         if (isAlive) 
         {
-            _horizontal = Input.GetAxis("Horizontal");
-            animator.SetFloat("speedX", Math.Abs(_horizontal));
+            animator.SetFloat("speedX", Math.Abs(InputManager.Horizontal));
             
-            if(_horizontal > 0) 
-            {
-                _horizontal = 1;
-            } 
-            if(_horizontal < 0) 
-            {
-                _horizontal = -1;
-            }
-
-            if (Input.GetKeyDown(KeyCode.W))
+            if (InputManager.IsJump)
             {
                 Jump();
+            }
+            if(transform.position.y < yBoundarie) 
+            {
+                PlayerDie();
             }
         }
         else 
@@ -54,23 +51,22 @@ public class PlayerController : MonoBehaviour
     {
         if (isAlive) 
         {
-            _rb.AddForce(transform.right * _horizontal * speedX);
+            RigidBody.AddForce(transform.right * InputManager.Horizontal * speedX);
 
-            if (_isJump)
+            if (isJump)
             {
-                _rb.AddForce(new Vector2(0f, 500f));
-                _isGround = false;
-                _isJump = false;
+                RigidBody.AddForce(new Vector2(0f, 500f));
+                isGround = false;
+                isJump = false;
             }
-            if (_horizontal > 0f && !_isFacingRight)
+            if (InputManager.Horizontal > 0f && !isFacingRight)
             {
                 Flip();
             }
-            else if (_horizontal < 0f && _isFacingRight)
+            else if (InputManager.Horizontal < 0f && isFacingRight)
             {
                 Flip();
             }
-
         }
     }
 
@@ -78,13 +74,13 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ground"))
         {
-            _isGround = true;
+            isGround = true;
         }
     }
 
     void Flip()
     {
-        _isFacingRight = !_isFacingRight;
+        isFacingRight = !isFacingRight;
         Vector3 playerScale = transform.localScale;
         playerScale.x *= -1;
         transform.localScale = playerScale;
@@ -92,11 +88,9 @@ public class PlayerController : MonoBehaviour
 
     public void Jump()
     {
-        if (!_isGround) return;
-
-        _isJump = true;
+        if (!isGround) return;
+        isJump = true;
         jumpSound.Play();
-
     }
 
     public void PlayerDie()
@@ -118,6 +112,7 @@ public class PlayerController : MonoBehaviour
             transform.Rotate(transform.forward, -90.0f);
             animator.enabled = true;
             transform.position = respawnPosition.position;
+            resetEnemies.RespawnEnemies();
         }
     }
 }
