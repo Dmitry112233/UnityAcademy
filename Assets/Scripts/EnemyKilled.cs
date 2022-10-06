@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using UnityEngine;
 
 public class EnemyKilled : MonoBehaviour
@@ -6,7 +7,7 @@ public class EnemyKilled : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player")) 
+        if (collision.gameObject.CompareTag(MyTags.Tags.Player)) 
         {
             Destroy(enemy);
         }

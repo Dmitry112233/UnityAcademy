@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -17,9 +18,6 @@ public class PlayerController : MonoBehaviour
     private float yBoundarie = -35f;
 
     private Rigidbody2D rigidBody;
-    private InputManager inputManager;
-
-    public InputManager InputManager { get { return inputManager = inputManager ?? GetComponent<InputManager>(); } }
     private Rigidbody2D RigidBody { get { return rigidBody = rigidBody ?? GetComponent<Rigidbody2D>(); }}
 
     private void Update()
@@ -48,7 +46,7 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Ground"))
+        if (other.gameObject.CompareTag(MyTags.Layers.Ground))
         {
             isGround = true;
         }
@@ -56,11 +54,11 @@ public class PlayerController : MonoBehaviour
 
     private void CheckFlip() 
     {
-        if (InputManager.Horizontal > 0f && !isFacingRight)
+        if (InputManager.GetInstance().Horizontal > 0f && !isFacingRight)
         {
             Flip();
         }
-        else if (InputManager.Horizontal < 0f && isFacingRight)
+        else if (InputManager.GetInstance().Horizontal < 0f && isFacingRight)
         {
             Flip();
         }
@@ -76,12 +74,12 @@ public class PlayerController : MonoBehaviour
 
     private void Move() 
     {
-        RigidBody.AddForce(transform.right * InputManager.Horizontal * speedX);
+        RigidBody.AddForce(transform.right * InputManager.GetInstance().Horizontal * speedX);
     }
 
     private void UpdateIsJump()
     {
-        if (InputManager.IsJump)
+        if (InputManager.GetInstance().IsJump)
         {
             if (!isGround) return;
             isJump = true;
@@ -120,7 +118,7 @@ public class PlayerController : MonoBehaviour
 
     private void SetAnimatorSpeedX() 
     {
-        animator.SetFloat("speedX", Math.Abs(InputManager.Horizontal));
+        animator.SetFloat("speedX", Math.Abs(InputManager.GetInstance().Horizontal));
     }
 
     private IEnumerator Respawn()
