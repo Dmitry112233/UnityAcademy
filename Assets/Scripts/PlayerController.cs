@@ -12,8 +12,8 @@ public class PlayerController : MonoBehaviour
     public bool isAlive = true;
 
     private bool isGround = false;
-    private bool isJump = false;
     private bool isFacingRight = true;
+    private bool isJump = false;
     private float yBoundarie = -35f;
 
     private Rigidbody2D rigidBody;
@@ -22,16 +22,12 @@ public class PlayerController : MonoBehaviour
     public InputManager InputManager { get { return inputManager = inputManager ?? GetComponent<InputManager>(); } }
     private Rigidbody2D RigidBody { get { return rigidBody = rigidBody ?? GetComponent<Rigidbody2D>(); }}
 
-    void Start()
-    {
-    }
-
     private void Update()
     {
         if (isAlive) 
         {
             SetAnimatorSpeedX();
-            Jump();
+            UpdateIsJump();
             CheckYPosition();
         }
         else 
@@ -44,22 +40,9 @@ public class PlayerController : MonoBehaviour
     {
         if (isAlive) 
         {
-            RigidBody.AddForce(transform.right * InputManager.Horizontal * speedX);
-
-            if (isJump)
-            {
-                RigidBody.AddForce(new Vector2(0f, 500f));
-                isGround = false;
-                isJump = false;
-            }
-            if (InputManager.Horizontal > 0f && !isFacingRight)
-            {
-                Flip();
-            }
-            else if (InputManager.Horizontal < 0f && isFacingRight)
-            {
-                Flip();
-            }
+            Move();
+            Jump();
+            CheckFlip();
         }
     }
 
@@ -71,7 +54,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Flip()
+    private void CheckFlip() 
+    {
+        if (InputManager.Horizontal > 0f && !isFacingRight)
+        {
+            Flip();
+        }
+        else if (InputManager.Horizontal < 0f && isFacingRight)
+        {
+            Flip();
+        }
+    }
+
+    private void Flip()
     {
         isFacingRight = !isFacingRight;
         Vector3 playerScale = transform.localScale;
@@ -79,13 +74,29 @@ public class PlayerController : MonoBehaviour
         transform.localScale = playerScale;
     }
 
-    public void Jump()
+    private void Move() 
+    {
+        RigidBody.AddForce(transform.right * InputManager.Horizontal * speedX);
+    }
+
+    private void UpdateIsJump()
     {
         if (InputManager.IsJump)
         {
             if (!isGround) return;
             isJump = true;
+        }
+    }
+
+    private void Jump()
+    {
+        if (isJump)
+        {
+            if (!isGround) return;
             jumpSound.Play();
+            RigidBody.AddForce(new Vector2(0f, 500f));
+            isJump = false;
+            isGround = false;
         }
     }
 
@@ -112,7 +123,7 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("speedX", Math.Abs(InputManager.Horizontal));
     }
 
-    public IEnumerator Respawn()
+    private IEnumerator Respawn()
     {
         yield return new WaitForSeconds(2);
         if (!isAlive)
