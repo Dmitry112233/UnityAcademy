@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     public AudioSource jumpSound;
     public Transform respawnPosition;
-    public ResetEnemies resetEnemies;
+    
     public bool isAlive = true;
 
     private bool isGround = false;
@@ -20,28 +20,28 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rigidBody;
     private Rigidbody2D RigidBody { get { return rigidBody = rigidBody ?? GetComponent<Rigidbody2D>(); }}
 
+    public delegate void PlayerDieHandler();
+    public event PlayerDieHandler NotifyPlayerDie;
+
+    private void Start()
+    {
+        InputManager.GetInstance().NotifyHorizontalFixedUpdate += Move;
+
+        InputManager.GetInstance().NotifyJump += UpdateIsJump;
+        InputManager.GetInstance().NotifyHorizontalUpdate += SetAnimatorSpeedX;
+        InputManager.GetInstance().NotifyHorizontalUpdate += CheckFlip;
+
+        NotifyPlayerDie += CallRespawnCoroutine;
+    }
+
     private void Update()
     {
-        if (isAlive) 
-        {
-            SetAnimatorSpeedX();
-            UpdateIsJump();
-            CheckYPosition();
-        }
-        else 
-        {
-            StartCoroutine(Respawn());
-        }
+        CheckYPosition();
     }
 
     private void FixedUpdate()
     {
-        if (isAlive) 
-        {
-            Move();
-            Jump();
-            CheckFlip();
-        }
+        Jump();
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -52,13 +52,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void CheckFlip() 
+    private void CheckFlip(float horizontal) 
     {
-        if (InputManager.GetInstance().Horizontal > 0f && !isFacingRight)
+        if (horizontal > 0f && !isFacingRight)
         {
             Flip();
         }
-        else if (InputManager.GetInstance().Horizontal < 0f && isFacingRight)
+        else if (horizontal < 0f && isFacingRight)
         {
             Flip();
         }
@@ -66,20 +66,26 @@ public class PlayerController : MonoBehaviour
 
     private void Flip()
     {
-        isFacingRight = !isFacingRight;
-        Vector3 playerScale = transform.localScale;
-        playerScale.x *= -1;
-        transform.localScale = playerScale;
+        if (isAlive) 
+        {
+            isFacingRight = !isFacingRight;
+            Vector3 playerScale = transform.localScale;
+            playerScale.x *= -1;
+            transform.localScale = playerScale;
+        }
     }
 
-    private void Move() 
+    private void Move(float horizontal) 
     {
-        RigidBody.AddForce(transform.right * InputManager.GetInstance().Horizontal * speedX);
+        if (isAlive) 
+        {
+            RigidBody.AddForce(transform.right * horizontal * speedX);
+        }
     }
 
-    private void UpdateIsJump()
+    private void UpdateIsJump(bool isJumpInput)
     {
-        if (InputManager.GetInstance().IsJump)
+        if (isJumpInput)
         {
             if (!isGround) return;
             isJump = true;
@@ -88,7 +94,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        if (isJump)
+        if (isJump && isAlive)
         {
             if (!isGround) return;
             jumpSound.Play();
@@ -105,20 +111,26 @@ public class PlayerController : MonoBehaviour
             isAlive = false;
             transform.Rotate(transform.forward, 90.0f);
             animator.enabled = false;
+            NotifyPlayerDie?.Invoke();
         }
     }
 
     private void CheckYPosition() 
     {
-        if (transform.position.y < yBoundarie)
+        if (isAlive && transform.position.y < yBoundarie)
         {
             PlayerDie();
         }
     }
 
-    private void SetAnimatorSpeedX() 
+    private void SetAnimatorSpeedX(float horizontal) 
     {
-        animator.SetFloat("speedX", Math.Abs(InputManager.GetInstance().Horizontal));
+        animator.SetFloat(MyTags.Animator.SpeedX, Math.Abs(horizontal));
+    }
+
+    private void CallRespawnCoroutine() 
+    {
+        StartCoroutine(Respawn());
     }
 
     private IEnumerator Respawn()
@@ -130,7 +142,6 @@ public class PlayerController : MonoBehaviour
             transform.Rotate(transform.forward, -90.0f);
             animator.enabled = true;
             transform.position = respawnPosition.position;
-            resetEnemies.RespawnEnemies();
         }
     }
 }

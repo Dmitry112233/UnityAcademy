@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Assets.Scripts
+﻿namespace Assets.Scripts
 {
     public static class MyTags
     {
@@ -12,9 +6,15 @@ namespace Assets.Scripts
         {
             public const string Player = "Player";
         }
+
         public static class Layers
         {
             public const string Ground = "Ground";
+        }
+
+        public static class Animator 
+        {
+            public const string SpeedX = "speedX"; 
         }
     }
 }

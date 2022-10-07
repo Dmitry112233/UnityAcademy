@@ -4,6 +4,14 @@ public class InputManager : MonoBehaviour
 {
     private static InputManager instance = null;
 
+    public delegate void HorizontalHandler(float horizontal);
+    public delegate void JumpHandler(bool isJump);
+
+    public event HorizontalHandler NotifyHorizontalUpdate;
+    public event HorizontalHandler NotifyHorizontalFixedUpdate;
+    public event JumpHandler NotifyJump;
+
+
     public float Horizontal { get; private set; }
     public bool IsJump { get; private set; }
 
@@ -33,6 +41,14 @@ public class InputManager : MonoBehaviour
     void Update()
     {
         Horizontal = Input.GetAxis("Horizontal");
+        NotifyHorizontalUpdate?.Invoke(Horizontal);
+
         IsJump = Input.GetKeyDown(KeyCode.W);
+        NotifyJump?.Invoke(IsJump);
+    }
+
+    private void FixedUpdate()
+    {
+        NotifyHorizontalFixedUpdate?.Invoke(Horizontal);
     }
 }

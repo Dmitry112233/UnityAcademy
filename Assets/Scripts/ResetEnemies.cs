@@ -1,13 +1,27 @@
+using System.Collections;
 using UnityEngine;
 
 public class ResetEnemies : MonoBehaviour
 {
     public GameObject[] enemiesPrefabs;
     public Transform[] spawnPositions;
- 
-    public void RespawnEnemies() 
+    public PlayerController playerController;
+
+    private void Start()
     {
-        foreach(Transform child in transform)
+        playerController.NotifyPlayerDie += CallRespawnEnemiesCoroutine;
+    }
+
+    private void CallRespawnEnemiesCoroutine()
+    {
+        StartCoroutine(RespawnEnemies());
+    }
+
+    public IEnumerator RespawnEnemies() 
+    {
+        yield return new WaitForSeconds(2);
+
+        foreach (Transform child in transform)
         {
             Destroy(child.gameObject);
         }
