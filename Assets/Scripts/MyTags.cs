@@ -1,4 +1,5 @@
-﻿namespace Assets.Scripts
+
+namespace Assets.Scripts
 {
     public static class MyTags
     {
@@ -12,9 +13,9 @@
             public const string Ground = "Ground";
         }
 
-        public static class Animator 
+        public static class Animator
         {
-            public const string SpeedX = "speedX"; 
+            public const string SpeedX = "speedX";
         }
     }
 }

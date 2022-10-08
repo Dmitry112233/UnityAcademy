@@ -1,6 +1,5 @@
 using Assets.Scripts;
 using System;
-using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -8,17 +7,15 @@ public class PlayerController : MonoBehaviour
     public float speedX = 200f;
     public Animator animator;
     public AudioSource jumpSound;
-    public Transform respawnPosition;
-    
+
     public bool isAlive = true;
 
     private bool isGround = false;
     private bool isFacingRight = true;
     private bool isJump = false;
-    private float yBoundarie = -35f;
 
     private Rigidbody2D rigidBody;
-    private Rigidbody2D RigidBody { get { return rigidBody = rigidBody ?? GetComponent<Rigidbody2D>(); }}
+    private Rigidbody2D RigidBody { get { return rigidBody = rigidBody ?? GetComponent<Rigidbody2D>(); } }
 
     public delegate void PlayerDieHandler();
     public event PlayerDieHandler NotifyPlayerDie;
@@ -26,17 +23,14 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         InputManager.GetInstance().NotifyHorizontalFixedUpdate += Move;
-
         InputManager.GetInstance().NotifyJump += UpdateIsJump;
         InputManager.GetInstance().NotifyHorizontalUpdate += SetAnimatorSpeedX;
         InputManager.GetInstance().NotifyHorizontalUpdate += CheckFlip;
 
-        NotifyPlayerDie += CallRespawnCoroutine;
     }
 
     private void Update()
     {
-        CheckYPosition();
     }
 
     private void FixedUpdate()
@@ -52,7 +46,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void CheckFlip(float horizontal) 
+    private void CheckFlip(float horizontal)
     {
         if (horizontal > 0f && !isFacingRight)
         {
@@ -66,7 +60,7 @@ public class PlayerController : MonoBehaviour
 
     private void Flip()
     {
-        if (isAlive) 
+        if (isAlive)
         {
             isFacingRight = !isFacingRight;
             Vector3 playerScale = transform.localScale;
@@ -75,9 +69,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Move(float horizontal) 
+    private void Move(float horizontal)
     {
-        if (isAlive) 
+        if (isAlive)
         {
             RigidBody.AddForce(transform.right * horizontal * speedX);
         }
@@ -104,44 +98,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void PlayerDie()
-    {
-        if (isAlive)
-        {
-            isAlive = false;
-            transform.Rotate(transform.forward, 90.0f);
-            animator.enabled = false;
-            NotifyPlayerDie?.Invoke();
-        }
-    }
-
-    private void CheckYPosition() 
-    {
-        if (isAlive && transform.position.y < yBoundarie)
-        {
-            PlayerDie();
-        }
-    }
-
-    private void SetAnimatorSpeedX(float horizontal) 
+    private void SetAnimatorSpeedX(float horizontal)
     {
         animator.SetFloat(MyTags.Animator.SpeedX, Math.Abs(horizontal));
     }
 
-    private void CallRespawnCoroutine() 
-    {
-        StartCoroutine(Respawn());
-    }
-
-    private IEnumerator Respawn()
-    {
-        yield return new WaitForSeconds(2);
-        if (!isAlive)
-        {
-            isAlive = true;
-            transform.Rotate(transform.forward, -90.0f);
-            animator.enabled = true;
-            transform.position = respawnPosition.position;
-        }
-    }
 }

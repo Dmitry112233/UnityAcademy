@@ -17,21 +17,21 @@ public class InputManager : MonoBehaviour
 
     private void Awake()
     {
-        if(instance != null && instance != this) 
+        if (instance != null && instance != this)
         {
             Debug.LogWarning("There is an already existed Input Manager");
             Destroy(this);
         }
-        else 
+        else
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
     }
 
-    public static InputManager GetInstance() 
+    public static InputManager GetInstance()
     {
-        if(instance == null)
+        if (instance == null)
         {
             throw new System.NullReferenceException("Input manager is null");
         }
