@@ -14,8 +14,5 @@ public class DestroyEffect : MonoBehaviour {
     {
         yield return new WaitForSeconds (time);
         DestroyObject(this.gameObject);
-
-
-       
     }
 }
