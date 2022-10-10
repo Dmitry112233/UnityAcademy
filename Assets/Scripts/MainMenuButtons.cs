@@ -13,25 +13,23 @@ public class MainMenuButtons : MonoBehaviour
     {
         button = GetComponent<Button>();
         mainCanvas = transform.parent.gameObject;
-
-        if (button != null && mainCanvas != null) 
-        {
-            button.onClick.AddListener(() => 
-            {
-                mainCanvas.SetActive(false);
-                canvasToOpen.SetActive(true);
-                if (canvasToOpen.name.Equals("ButtonsCanvas")) 
-                {
-                    canvasToOpen.transform.Find("One")?.gameObject.SetActive(true);
-                    canvasToOpen.transform.Find("Two")?.gameObject.SetActive(true);
-                }
-            });
-        }
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void ButtonClickedFinished() 
+    {
+        mainCanvas.SetActive(false);
+        canvasToOpen.SetActive(true);
+
+        if (canvasToOpen.name.Equals("ButtonsCanvas"))
+        {
+            canvasToOpen.transform.Find("One")?.gameObject.SetActive(true);
+            canvasToOpen.transform.Find("Two")?.gameObject.SetActive(true);
+        }
     }
 }
