@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public float health = 100f;
     public float speedX = 200f;
     public Animator animator;
     public AudioSource jumpSound;
@@ -48,16 +49,9 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag(MyTags.Tags.Ground))
         {
-            print("GROUND");
             isGround = true;
         }
-        if (other.gameObject.CompareTag(MyTags.Tags.DeadZone))
-        {
-            print("DEAD ZONE");
-            PlayerDie();
-        }
     }
-
 
     private void CheckFlip(float horizontal) 
     {
@@ -125,6 +119,15 @@ public class PlayerController : MonoBehaviour
     private void CheckYPosition() 
     {
         if (isAlive && transform.position.y < yBoundarie)
+        {
+            PlayerDie();
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+        if (health <= 0)
         {
             PlayerDie();
         }
