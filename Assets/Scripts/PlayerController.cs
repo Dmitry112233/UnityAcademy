@@ -46,11 +46,18 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag(MyTags.Layers.Ground))
+        if (other.gameObject.CompareTag(MyTags.Tags.Ground))
         {
+            print("GROUND");
             isGround = true;
         }
+        if (other.gameObject.CompareTag(MyTags.Tags.DeadZone))
+        {
+            print("DEAD ZONE");
+            PlayerDie();
+        }
     }
+
 
     private void CheckFlip(float horizontal) 
     {

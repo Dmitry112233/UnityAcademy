@@ -5,10 +5,7 @@
         public static class Tags
         {
             public const string Player = "Player";
-        }
-
-        public static class Layers
-        {
+            public const string DeadZone = "DeadZone";
             public const string Ground = "Ground";
         }
 
