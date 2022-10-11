@@ -20,7 +20,7 @@ public class InputManager : MonoBehaviour
         if (instance != null && instance != this)
         {
             Debug.LogWarning("There is an already existed Input Manager");
-            Destroy(this);
+            Destroy(gameObject);
         }
         else
         {
@@ -41,7 +41,11 @@ public class InputManager : MonoBehaviour
     void Update()
     {
         Horizontal = Input.GetAxis("Horizontal");
-        NotifyHorizontalUpdate?.Invoke(Horizontal);
+
+        if (Horizontal != 0f) 
+        {
+            NotifyHorizontalUpdate?.Invoke(Horizontal);
+        }
 
         IsJump = Input.GetKeyDown(KeyCode.W);
         NotifyJump?.Invoke(IsJump);
@@ -49,6 +53,11 @@ public class InputManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        NotifyHorizontalFixedUpdate?.Invoke(Horizontal);
+        if (Horizontal != 0f)
+        {
+            NotifyHorizontalFixedUpdate?.Invoke(Horizontal);
+        }
     }
+
+
 }

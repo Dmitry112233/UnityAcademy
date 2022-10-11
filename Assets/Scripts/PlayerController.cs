@@ -17,9 +17,6 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rigidBody;
     private Rigidbody2D RigidBody { get { return rigidBody = rigidBody ?? GetComponent<Rigidbody2D>(); } }
 
-    public delegate void PlayerDieHandler();
-    public event PlayerDieHandler NotifyPlayerDie;
-
     private void Start()
     {
         InputManager.GetInstance().NotifyHorizontalFixedUpdate += Move;
