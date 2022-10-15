@@ -5,26 +5,16 @@ namespace Assets.Scripts
 {
     public class Timer
     {
-        public event Action<Timer> OnTime;
+        public Action onTime;
 
-        private float targetTime;
-        private float currentTime;
+        public float executionTime;
+        public float delay;
 
-        public int Index { get; private set; }
-
-        public Timer(float time) 
+        public Timer(float delay, Action action) 
         {
-            targetTime = time;
-            currentTime = 0.0f;
-        }
-
-        public void Update() 
-        {
-            currentTime += Time.deltaTime;
-            if(currentTime >= targetTime) 
-            {
-                OnTime(this);
-            }
+            executionTime = Time.time + delay;
+            onTime = action;
+            this.delay = delay;
         }
     }
 }

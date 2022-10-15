@@ -1,4 +1,5 @@
 using Assets.Scripts;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,25 +31,20 @@ public class TimerManager : MonoBehaviour
         return instance;
     }
 
-    public Timer GetTimer(float time)
+    public void AddTimer(float delay, Action action)
     {
-        var timer = new Timer(time);
-        timers.Add(timer);
-        return timer;
+        timers.Add(new Timer(delay, action));
     }
-
-    public void RemoveTimer(Timer timer)
-    {
-        timers.Remove(timer);
-    } 
-
 
     void Update()
     {
-        foreach(var timer in timers) 
+        for(int i = 0; i < timers.Count; i++) 
         {
-            timer.Update();
-            print("Here" + Time.deltaTime);
+            if(timers[i].executionTime < Time.time) 
+            {
+                timers[i].onTime?.Invoke();
+                timers.RemoveAt(i);
+            }
         }
     }
 }

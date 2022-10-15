@@ -17,10 +17,10 @@ public class MainMenuButtons : MonoBehaviour
 
         button.onClick.AddListener(() =>
         {
-            var timer = TimerManager.GetInstance().GetTimer(1f);
-            timer.OnTime += DoOnClick;
-/*
-            mainCanvas.SetActive(false);
+            TimerManager.GetInstance().AddTimer(1f, DoOnClick);
+
+
+            /*mainCanvas.SetActive(false);
             canvasToOpen.SetActive(true);
 
             if (canvasToOpen.name.Equals("ButtonsCanvas"))
@@ -37,11 +37,8 @@ public class MainMenuButtons : MonoBehaviour
         
     }
 
-    public void DoOnClick(Timer timer) 
+    public void DoOnClick() 
     {
-        timer.OnTime -= DoOnClick;
-        TimerManager.GetInstance().RemoveTimer(timer);
-
         mainCanvas.SetActive(false);
         canvasToOpen.SetActive(true);
 
