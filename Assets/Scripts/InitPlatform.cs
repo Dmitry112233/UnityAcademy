@@ -76,6 +76,7 @@ public class InitPlatform : MonoBehaviour
         }
 
         mpMeshFilter.mesh.triangles = GenerateTriangles();
+        mpMeshFilter.mesh.RecalculateNormals();
         mp.GetComponent<MeshCollider>().sharedMesh = mpMeshFilter.mesh;
         mp.GetComponent<Rigidbody>().isKinematic = true;
 
@@ -101,6 +102,7 @@ public class InitPlatform : MonoBehaviour
         }
 
         mpMeshFilter.mesh.triangles = GenerateTriangles();
+        mpMeshFilter.mesh.RecalculateNormals();
         mp.GetComponent<MeshCollider>().sharedMesh = mpMeshFilter.mesh;
         mp.GetComponent<Rigidbody>().useGravity = true;
 
