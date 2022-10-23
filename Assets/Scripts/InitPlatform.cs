@@ -107,6 +107,7 @@ public class InitPlatform : MonoBehaviour
         }
     }
 
+    //make common method for both axis, pass new vector3 position, size and method for generate vertices
     private GameObject GenerateMainPlatformZ(Vector3 currentPlatformPosition, float gap)
     {
         GameObject mp = Instantiate(emptyPlatformPrefab, currentPlatformPosition, Quaternion.identity);
