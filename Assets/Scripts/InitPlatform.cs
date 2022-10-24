@@ -13,18 +13,19 @@ public class InitPlatform : MonoBehaviour
     public GameObject basePlatform;
     public Material material;
     public GameObject emptyPlatformPrefab;
-    
+
     private GameObject currentPlatform;
     private GameObject initPlatform;
-    private float sizeZ;
-    private float sizeX;
+
+    public float SizeZ { get; set; }
+    public float SizeX { get; set; }
 
     private bool isZAxis;
 
     private void Start()
     {
-        sizeZ = 1f;
-        sizeX = 1f;
+        SizeZ = 1f;
+        SizeX = 1f;
 
         initPlatform = meshGeneratorUtil.GenerateInitPlatform(initZTransform.position);
         currentPlatform = initPlatform;
@@ -77,7 +78,7 @@ public class InitPlatform : MonoBehaviour
         {
             var gap = currentPlatformPosition.z - basePosition.z;
 
-            if (Mathf.Abs(gap) <= sizeZ)
+            if (Mathf.Abs(gap) <= SizeZ)
             {
                 var generatedPlatform = RecalculateAndGeneratePlatformsZAxis(gap, currentPlatformPosition);
                 UpdateBaseAndInitPlatforms(generatedPlatform);
@@ -92,7 +93,7 @@ public class InitPlatform : MonoBehaviour
         {
             var gap = currentPlatformPosition.x - basePosition.x;
 
-            if (Mathf.Abs(gap) <= sizeX)
+            if (Mathf.Abs(gap) <= SizeX)
             {
                 var generatedPlatform = RecalculateAndGeneratePlatformsXAxis(gap, currentPlatformPosition);
                 UpdateBaseAndInitPlatforms(generatedPlatform);
@@ -114,18 +115,18 @@ public class InitPlatform : MonoBehaviour
 
         if (gap > 0)
         {
-            generatedPlatform = meshGeneratorUtil.GeneratePlatform(position, sizeX, sizeZ, gap, meshGeneratorUtil.GenerateVerticesPositiveGapZ, true);
-            sizeZ -= gap;
-            additionalPlatformPosition = new Vector3(currentPlatformPosition.x, currentPlatformPosition.y, currentPlatformPosition.z + (sizeZ / 2) + (gap / 2));
+            generatedPlatform = meshGeneratorUtil.GeneratePlatform(position, gap, meshGeneratorUtil.GenerateVerticesPositiveGapZ, true);
+            SizeZ -= gap;
+            additionalPlatformPosition = new Vector3(currentPlatformPosition.x, currentPlatformPosition.y, currentPlatformPosition.z + (SizeZ / 2) + (gap / 2));
         }
         else
         {
-            generatedPlatform = meshGeneratorUtil.GeneratePlatform(position, sizeX, sizeZ, gap, meshGeneratorUtil.GenerateVerticesNegativeGapZ, true);
-            sizeZ += gap;
-            additionalPlatformPosition = new Vector3(currentPlatformPosition.x, currentPlatformPosition.y, currentPlatformPosition.z - (sizeZ / 2) + (gap / 2));
+            generatedPlatform = meshGeneratorUtil.GeneratePlatform(position, gap, meshGeneratorUtil.GenerateVerticesNegativeGapZ, true);
+            SizeZ += gap;
+            additionalPlatformPosition = new Vector3(currentPlatformPosition.x, currentPlatformPosition.y, currentPlatformPosition.z - (SizeZ / 2) + (gap / 2));
         }
 
-        var additionalPlatform = meshGeneratorUtil.GeneratePlatform(additionalPlatformPosition, sizeX, sizeZ, gap, meshGeneratorUtil.GenerateVerticesPartialZ, false);
+        var additionalPlatform = meshGeneratorUtil.GeneratePlatform(additionalPlatformPosition, gap, meshGeneratorUtil.GenerateVerticesPartialZ, false);
         StartCoroutine(DestroyAdditionalPlatform(additionalPlatform));
 
         return generatedPlatform;
@@ -139,18 +140,18 @@ public class InitPlatform : MonoBehaviour
 
         if (gap > 0)
         {
-            generatedPlatform = meshGeneratorUtil.GeneratePlatform(position, sizeX, sizeZ, gap, meshGeneratorUtil.GenerateVerticesPositiveGapX, true);
-            sizeX -= gap;
-            additionalPlatformPosition = new Vector3(currentPlatformPosition.x + (sizeX / 2) + (gap / 2), currentPlatformPosition.y, currentPlatformPosition.z);
+            generatedPlatform = meshGeneratorUtil.GeneratePlatform(position, gap, meshGeneratorUtil.GenerateVerticesPositiveGapX, true);
+            SizeX -= gap;
+            additionalPlatformPosition = new Vector3(currentPlatformPosition.x + (SizeX / 2) + (gap / 2), currentPlatformPosition.y, currentPlatformPosition.z);
         }
         else
         {
-            generatedPlatform = meshGeneratorUtil.GeneratePlatform(position, sizeX, sizeZ, gap, meshGeneratorUtil.GenerateVerticesNegativeGapX, true);
-            sizeX += gap;
-            additionalPlatformPosition = new Vector3(currentPlatformPosition.x - (sizeX / 2) + (gap / 2), currentPlatformPosition.y, currentPlatformPosition.z);
+            generatedPlatform = meshGeneratorUtil.GeneratePlatform(position, gap, meshGeneratorUtil.GenerateVerticesNegativeGapX, true);
+            SizeX += gap;
+            additionalPlatformPosition = new Vector3(currentPlatformPosition.x - (SizeX / 2) + (gap / 2), currentPlatformPosition.y, currentPlatformPosition.z);
         }
 
-        var additionalPlatform = meshGeneratorUtil.GeneratePlatform(additionalPlatformPosition, sizeZ, sizeX, gap, meshGeneratorUtil.GenerateVerticesPartialX, false);
+        var additionalPlatform = meshGeneratorUtil.GeneratePlatform(additionalPlatformPosition, gap, meshGeneratorUtil.GenerateVerticesPartialX, false);
         StartCoroutine(DestroyAdditionalPlatform(additionalPlatform));
 
         return generatedPlatform;

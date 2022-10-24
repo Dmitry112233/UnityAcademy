@@ -6,14 +6,15 @@ namespace Assets.Scripts
     public class MeshGeneratorUtil : MonoBehaviour
     {
         public GameObject emptyPlatformPrefab;
+        public InitPlatform ip;
 
-        public GameObject GeneratePlatform(Vector3 position, float sizeX, float sizeZ, float gap, Func<float, float, float, Vector3[]> generateVertices, bool isMain)
+        public GameObject GeneratePlatform(Vector3 position, float gap, Func<float, Vector3[]> generateVertices, bool isMain)
         {
             GameObject mp = Instantiate(emptyPlatformPrefab, position, Quaternion.identity);
 
             var mpMeshFilter = mp.GetComponent<MeshFilter>();
             mpMeshFilter.mesh = new Mesh();
-            mpMeshFilter.mesh.vertices = generateVertices(gap, sizeX, sizeZ);
+            mpMeshFilter.mesh.vertices = generateVertices(gap);
             mpMeshFilter.mesh.triangles = GenerateTriangles();
             mpMeshFilter.mesh.RecalculateNormals();
             mp.GetComponent<MeshCollider>().sharedMesh = mpMeshFilter.mesh;
@@ -41,99 +42,99 @@ namespace Assets.Scripts
             return mp;
         }
 
-        public Vector3[] GenerateVerticesPositiveGapZ(float gap, float sizeX, float sizeZ)
+        public Vector3[] GenerateVerticesPositiveGapZ(float gap)
         {
             return new Vector3[]
             {
-            new Vector3(sizeX / 2f, 0.05f, (sizeZ - gap)/2f),
-            new Vector3(sizeX / 2f, 0.05f, -1 * (sizeZ - gap)/2f),
-            new Vector3(-1f * sizeX / 2f, 0.05f, (sizeZ - gap)/2f),
-            new Vector3(-1f * sizeX / 2f, 0.05f, -1 * (sizeZ - gap)/2f),
+            new Vector3(ip.SizeX / 2f, 0.05f, (ip.SizeZ - gap)/2f),
+            new Vector3(ip.SizeX / 2f, 0.05f, -1 * (ip.SizeZ - gap)/2f),
+            new Vector3(-1f * ip.SizeX / 2f, 0.05f, (ip.SizeZ - gap)/2f),
+            new Vector3(-1f * ip.SizeX / 2f, 0.05f, -1 * (ip.SizeZ - gap)/2f),
 
-            new Vector3(sizeX / 2f, -0.05f, -1f * (sizeZ - gap)/2f),
-            new Vector3(-1f * sizeX / 2f, -0.05f, -1f * (sizeZ - gap)/2f),
-            new Vector3(-1f * sizeX / 2f, -0.05f, (sizeZ - gap)/2f),
-            new Vector3(sizeX / 2f, -0.05f, (sizeZ - gap)/2f),
+            new Vector3(ip.SizeX / 2f, -0.05f, -1f * (ip.SizeZ - gap)/2f),
+            new Vector3(-1f * ip.SizeX / 2f, -0.05f, -1f * (ip.SizeZ - gap)/2f),
+            new Vector3(-1f * ip.SizeX / 2f, -0.05f, (ip.SizeZ - gap)/2f),
+            new Vector3(ip.SizeX / 2f, -0.05f, (ip.SizeZ - gap)/2f),
             };
         }
 
-        public Vector3[] GenerateVerticesPositiveGapX(float gap, float sizeX, float sizeZ)
+        public Vector3[] GenerateVerticesPositiveGapX(float gap)
         {
             return new Vector3[]
             {
-            new Vector3((sizeX - gap)/2f, 0.05f, sizeZ / 2f),
-            new Vector3((sizeX - gap)/2f, 0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1f * (sizeX - gap)/2f, 0.05f, sizeZ / 2f),
-            new Vector3(-1f *(sizeX - gap)/2f, 0.05f, -1f * sizeZ / 2f),
+            new Vector3((ip.SizeX - gap)/2f, 0.05f, ip.SizeZ / 2f),
+            new Vector3((ip.SizeX - gap)/2f, 0.05f, -1f * ip.SizeZ / 2f),
+            new Vector3(-1f * (ip.SizeX - gap)/2f, 0.05f, ip.SizeZ / 2f),
+            new Vector3(-1f *(ip.SizeX - gap)/2f, 0.05f, -1f * ip.SizeZ / 2f),
 
-            new Vector3((sizeX - gap)/2f, -0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1f * (sizeX - gap)/2f, -0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1f * (sizeX - gap)/2f, -0.05f, sizeZ / 2f),
-            new Vector3((sizeX - gap)/2f, -0.05f, sizeZ / 2f),
+            new Vector3((ip.SizeX - gap)/2f, -0.05f, -1f * ip.SizeZ / 2f),
+            new Vector3(-1f * (ip.SizeX - gap)/2f, -0.05f, -1f * ip.SizeZ / 2f),
+            new Vector3(-1f * (ip.SizeX - gap)/2f, -0.05f, ip.SizeZ / 2f),
+            new Vector3((ip.SizeX - gap)/2f, -0.05f, ip.SizeZ / 2f),
             };
         }
 
-        public Vector3[] GenerateVerticesNegativeGapZ(float gap, float sizeX, float sizeZ)
+        public Vector3[] GenerateVerticesNegativeGapZ(float gap)
         {
             return new Vector3[]
             {
-            new Vector3(sizeX / 2f, 0.05f, (sizeZ + gap)/2f),
-            new Vector3(sizeX / 2f, 0.05f, -1f * (sizeZ + gap)/2f),
-            new Vector3(-1f * sizeX / 2f, 0.05f, (sizeZ + gap)/2f),
-            new Vector3(-1f * sizeX / 2f, 0.05f, -1f * (sizeZ + gap)/2f),
+            new Vector3(ip.SizeX / 2f, 0.05f, (ip.SizeZ + gap)/2f),
+            new Vector3(ip.SizeX / 2f, 0.05f, -1f * (ip.SizeZ + gap)/2f),
+            new Vector3(-1f * ip.SizeX / 2f, 0.05f, (ip.SizeZ + gap)/2f),
+            new Vector3(-1f * ip.SizeX / 2f, 0.05f, -1f * (ip.SizeZ + gap)/2f),
 
-            new Vector3(sizeX / 2f, -0.05f, -1f * (sizeZ + gap)/2f),
-            new Vector3(-1f * sizeX / 2f, -0.05f, -1f * (sizeZ + gap)/2f),
-            new Vector3(-1f * sizeX / 2f, -0.05f, (sizeZ + gap)/2f),
-            new Vector3(sizeX / 2f, -0.05f, (sizeZ + gap)/2f),
+            new Vector3(ip.SizeX / 2f, -0.05f, -1f * (ip.SizeZ + gap)/2f),
+            new Vector3(-1f * ip.SizeX / 2f, -0.05f, -1f * (ip.SizeZ + gap)/2f),
+            new Vector3(-1f * ip.SizeX / 2f, -0.05f, (ip.SizeZ + gap)/2f),
+            new Vector3(ip.SizeX / 2f, -0.05f, (ip.SizeZ + gap)/2f),
             };
         }
 
-        public Vector3[] GenerateVerticesNegativeGapX(float gap, float sizeX, float sizeZ)
+        public Vector3[] GenerateVerticesNegativeGapX(float gap)
         {
             return new Vector3[]
             {
-             new Vector3((sizeX + gap)/2f, 0.05f, sizeZ / 2f),
-            new Vector3((sizeX + gap)/2f, 0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1f * (sizeX + gap)/2f, 0.05f, sizeZ / 2f),
-            new Vector3(-1f * (sizeX + gap)/2f, 0.05f, -1f * sizeZ / 2f),
+             new Vector3((ip.SizeX + gap)/2f, 0.05f, ip.SizeZ / 2f),
+            new Vector3((ip.SizeX + gap)/2f, 0.05f, -1f * ip.SizeZ / 2f),
+            new Vector3(-1f * (ip.SizeX + gap)/2f, 0.05f, ip.SizeZ / 2f),
+            new Vector3(-1f * (ip.SizeX + gap)/2f, 0.05f, -1f * ip.SizeZ / 2f),
 
-            new Vector3((sizeX + gap)/2f, -0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1f * (sizeX + gap)/2f, -0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1f * (sizeX + gap)/2f, -0.05f, sizeZ / 2f),
-            new Vector3((sizeX + gap)/2f, -0.05f, sizeZ / 2f),
+            new Vector3((ip.SizeX + gap)/2f, -0.05f, -1f * ip.SizeZ / 2f),
+            new Vector3(-1f * (ip.SizeX + gap)/2f, -0.05f, -1f * ip.SizeZ / 2f),
+            new Vector3(-1f * (ip.SizeX + gap)/2f, -0.05f, ip.SizeZ / 2f),
+            new Vector3((ip.SizeX + gap)/2f, -0.05f, ip.SizeZ / 2f),
             };
         }
 
-        public Vector3[] GenerateVerticesPartialZ(float gap, float sizeX, float sizeZ)
+        public Vector3[] GenerateVerticesPartialZ(float gap)
         {
             return new Vector3[]
             {
-            new Vector3(sizeX / 2f, 0.05f, gap/2f),
-            new Vector3(sizeX / 2f, 0.05f, -1f * gap/2f),
-            new Vector3(-1f * sizeX / 2f, 0.05f, gap/2f),
-            new Vector3(-1f * sizeX / 2f, 0.05f, -1f * gap/2f),
+            new Vector3(ip.SizeX / 2f, 0.05f, gap/2f),
+            new Vector3(ip.SizeX / 2f, 0.05f, -1f * gap/2f),
+            new Vector3(-1f * ip.SizeX / 2f, 0.05f, gap/2f),
+            new Vector3(-1f * ip.SizeX / 2f, 0.05f, -1f * gap/2f),
 
-            new Vector3(sizeX / 2f, -0.05f, -1f * gap/2f),
-            new Vector3(-1f * sizeX / 2f, -0.05f, -1f * gap/2f),
-            new Vector3(-1f * sizeX / 2f, -0.05f, gap/2f),
-            new Vector3(sizeX / 2f, -0.05f, gap/2f),
+            new Vector3(ip.SizeX / 2f, -0.05f, -1f * gap/2f),
+            new Vector3(-1f * ip.SizeX / 2f, -0.05f, -1f * gap/2f),
+            new Vector3(-1f * ip.SizeX / 2f, -0.05f, gap/2f),
+            new Vector3(ip.SizeX / 2f, -0.05f, gap/2f),
             };
         }
 
-        public Vector3[] GenerateVerticesPartialX(float gap, float sizeZ, float sizeX)
+        public Vector3[] GenerateVerticesPartialX(float gap)
         {
             return new Vector3[]
             {
-            new Vector3(gap/2f, 0.05f, sizeZ / 2f),
-            new Vector3(gap/2f, 0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1f * gap/2f, 0.05f, sizeZ / 2f),
-            new Vector3(-1f * gap/2f, 0.05f, -1f * sizeZ / 2f),
+            new Vector3(gap/2f, 0.05f, ip.SizeZ / 2f),
+            new Vector3(gap/2f, 0.05f, -1f * ip.SizeZ / 2f),
+            new Vector3(-1f * gap/2f, 0.05f, ip.SizeZ / 2f),
+            new Vector3(-1f * gap/2f, 0.05f, -1f * ip.SizeZ / 2f),
 
-            new Vector3(gap/2f, -0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1f * gap/2f, -0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1f * gap/2f, -0.05f, sizeZ / 2f),
-            new Vector3(gap/2f, -0.05f, sizeZ / 2f),
+            new Vector3(gap/2f, -0.05f, -1f * ip.SizeZ / 2f),
+            new Vector3(-1f * gap/2f, -0.05f, -1f * ip.SizeZ / 2f),
+            new Vector3(-1f * gap/2f, -0.05f, ip.SizeZ / 2f),
+            new Vector3(gap/2f, -0.05f, ip.SizeZ / 2f),
             };
         }
 

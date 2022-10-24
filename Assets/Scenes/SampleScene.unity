@@ -602,6 +602,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   emptyPlatformPrefab: {fileID: 5903136624841040756, guid: d06615b937ffbb74b9daf6249f88ccdc, type: 3}
+  ip: {fileID: 1583024361}
 --- !u!4 &1487579939
 Transform:
   m_ObjectHideFlags: 0
