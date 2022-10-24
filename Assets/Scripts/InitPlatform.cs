@@ -1,8 +1,12 @@
+using Assets.Scripts;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class InitPlatform : MonoBehaviour
 {
+    public MeshGeneratorUtil meshGeneratorUtil;
+
     public Transform initZTransform;
     public Transform initXTransform;
 
@@ -22,7 +26,7 @@ public class InitPlatform : MonoBehaviour
         sizeZ = 1f;
         sizeX = 1f;
 
-        initPlatform = GenerateInitPlatform();
+        initPlatform = meshGeneratorUtil.GenerateInitPlatform(initZTransform.position);
         currentPlatform = initPlatform;
 
         isZAxis = false;
@@ -38,7 +42,7 @@ public class InitPlatform : MonoBehaviour
             isZAxis = !isZAxis;
             if (currentPlatform != null)
             {
-                CheckPositionGeneratePlatformsOrRestart(currentPlatform.transform.position, basePlatform.transform.position);
+                CheckPositionGeneratePlatformsUpdateInitPosition(currentPlatform.transform.position, basePlatform.transform.position);
                 Destroy(currentPlatform);
             }
 
@@ -67,7 +71,7 @@ public class InitPlatform : MonoBehaviour
         }
     }
 
-    public void CheckPositionGeneratePlatformsOrRestart(Vector3 currentPlatformPosition, Vector3 basePosition)
+    private void CheckPositionGeneratePlatformsUpdateInitPosition(Vector3 currentPlatformPosition, Vector3 basePosition)
     {
         if (isZAxis) 
         {
@@ -75,16 +79,13 @@ public class InitPlatform : MonoBehaviour
 
             if (Mathf.Abs(gap) <= sizeZ)
             {
-                var lastGeneratedPlatform = GenerateMainPlatformZ(currentPlatformPosition, gap);
-                GenerateAdditionalPlatformZ(currentPlatformPosition, gap);
-
-                initPlatform = lastGeneratedPlatform;
-                basePlatform = lastGeneratedPlatform;
-                initXTransform.position = new Vector3(initXTransform.position.x, initXTransform.position.y, lastGeneratedPlatform.transform.position.z);
+                var generatedPlatform = RecalculateAndGeneratePlatformsZAxis(gap, currentPlatformPosition);
+                UpdateBaseAndInitPlatforms(generatedPlatform);
+                initXTransform.position = new Vector3(initXTransform.position.x, initXTransform.position.y, generatedPlatform.transform.position.z);
             }
             else
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                ReloadScene();
             }
         }
         else
@@ -93,254 +94,82 @@ public class InitPlatform : MonoBehaviour
 
             if (Mathf.Abs(gap) <= sizeX)
             {
-                var lastGeneratedPlatform = GenerateMainPlatformX(currentPlatformPosition, gap);
-                GenerateAdditionalPlatformX(currentPlatformPosition, gap);
-
-                initPlatform = lastGeneratedPlatform;
-                basePlatform = lastGeneratedPlatform;
-                initZTransform.position = new Vector3(lastGeneratedPlatform.transform.position.x, initZTransform.position.y, initZTransform.position.z);
+                var generatedPlatform = RecalculateAndGeneratePlatformsXAxis(gap, currentPlatformPosition);
+                UpdateBaseAndInitPlatforms(generatedPlatform);
+                initZTransform.position = new Vector3(generatedPlatform.transform.position.x, initZTransform.position.y, initZTransform.position.z);
             }
             else
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                ReloadScene();
             }
         }
     }
 
-    //make common method for both axis, pass new vector3 position, size and method for generate vertices
-    private GameObject GenerateMainPlatformZ(Vector3 currentPlatformPosition, float gap)
+    private GameObject RecalculateAndGeneratePlatformsZAxis(float gap, Vector3 currentPlatformPosition) 
     {
-        GameObject mp = Instantiate(emptyPlatformPrefab, currentPlatformPosition, Quaternion.identity);
-        mp.transform.position = new Vector3(currentPlatformPosition.x, currentPlatformPosition.y, currentPlatformPosition.z - gap / 2);
+        var position = new Vector3(currentPlatformPosition.x, currentPlatformPosition.y, currentPlatformPosition.z - gap / 2);
 
-        var mpMeshFilter = mp.GetComponent<MeshFilter>();
-        mpMeshFilter.mesh = new Mesh();
+        GameObject generatedPlatform = null;
+        Vector3 additionalPlatformPosition;
 
         if (gap > 0)
         {
-            mpMeshFilter.mesh.vertices = GenerateVerticesPositiveGapZ(gap);
+            generatedPlatform = meshGeneratorUtil.GeneratePlatform(position, sizeX, sizeZ, gap, meshGeneratorUtil.GenerateVerticesPositiveGapZ, true);
             sizeZ -= gap;
+            additionalPlatformPosition = new Vector3(currentPlatformPosition.x, currentPlatformPosition.y, currentPlatformPosition.z + (sizeZ / 2) + (gap / 2));
         }
         else
         {
-            mpMeshFilter.mesh.vertices = GenerateVerticesNegativeGapZ(gap);
+            generatedPlatform = meshGeneratorUtil.GeneratePlatform(position, sizeX, sizeZ, gap, meshGeneratorUtil.GenerateVerticesNegativeGapZ, true);
             sizeZ += gap;
+            additionalPlatformPosition = new Vector3(currentPlatformPosition.x, currentPlatformPosition.y, currentPlatformPosition.z - (sizeZ / 2) + (gap / 2));
         }
 
-        mpMeshFilter.mesh.triangles = GenerateTriangles();
-        mpMeshFilter.mesh.RecalculateNormals();
-        mp.GetComponent<MeshCollider>().sharedMesh = mpMeshFilter.mesh;
-        mp.GetComponent<Rigidbody>().isKinematic = true;
+        var additionalPlatform = meshGeneratorUtil.GeneratePlatform(additionalPlatformPosition, sizeX, sizeZ, gap, meshGeneratorUtil.GenerateVerticesPartialZ, false);
+        StartCoroutine(DestroyAdditionalPlatform(additionalPlatform));
 
-        return mp;
+        return generatedPlatform;
     }
 
-    private GameObject GenerateMainPlatformX(Vector3 currentPlatformPosition, float gap)
+    private GameObject RecalculateAndGeneratePlatformsXAxis(float gap, Vector3 currentPlatformPosition)
     {
-        GameObject mp = Instantiate(emptyPlatformPrefab, currentPlatformPosition, Quaternion.identity);
-        mp.transform.position = new Vector3(currentPlatformPosition.x - gap / 2, currentPlatformPosition.y, currentPlatformPosition.z);
-
-        var mpMeshFilter = mp.GetComponent<MeshFilter>();
-        mpMeshFilter.mesh = new Mesh();
+        var position = new Vector3(currentPlatformPosition.x - gap / 2, currentPlatformPosition.y, currentPlatformPosition.z);
+        GameObject generatedPlatform = null;
+        Vector3 additionalPlatformPosition;
 
         if (gap > 0)
         {
-            mpMeshFilter.mesh.vertices = GenerateVerticesPositiveGapX(gap);
+            generatedPlatform = meshGeneratorUtil.GeneratePlatform(position, sizeX, sizeZ, gap, meshGeneratorUtil.GenerateVerticesPositiveGapX, true);
             sizeX -= gap;
+            additionalPlatformPosition = new Vector3(currentPlatformPosition.x + (sizeX / 2) + (gap / 2), currentPlatformPosition.y, currentPlatformPosition.z);
         }
         else
         {
-            mpMeshFilter.mesh.vertices = GenerateVerticesNegativeGapX(gap);
+            generatedPlatform = meshGeneratorUtil.GeneratePlatform(position, sizeX, sizeZ, gap, meshGeneratorUtil.GenerateVerticesNegativeGapX, true);
             sizeX += gap;
+            additionalPlatformPosition = new Vector3(currentPlatformPosition.x - (sizeX / 2) + (gap / 2), currentPlatformPosition.y, currentPlatformPosition.z);
         }
 
-        mpMeshFilter.mesh.triangles = GenerateTriangles();
-        mpMeshFilter.mesh.RecalculateNormals();
-        mp.GetComponent<MeshCollider>().sharedMesh = mpMeshFilter.mesh;
-        mp.GetComponent<Rigidbody>().isKinematic = true;
+        var additionalPlatform = meshGeneratorUtil.GeneratePlatform(additionalPlatformPosition, sizeZ, sizeX, gap, meshGeneratorUtil.GenerateVerticesPartialX, false);
+        StartCoroutine(DestroyAdditionalPlatform(additionalPlatform));
 
-        return mp;
+        return generatedPlatform;
     }
 
-    private GameObject GenerateAdditionalPlatformZ(Vector3 currentPlatformPosition, float gap)
+    private void ReloadScene() 
     {
-        GameObject mp = Instantiate(emptyPlatformPrefab, currentPlatformPosition, Quaternion.identity);
-
-        var mpMeshFilter = mp.GetComponent<MeshFilter>();
-        mpMeshFilter.mesh = new Mesh();
-
-        if (gap > 0)
-        {
-            mp.transform.position = new Vector3(currentPlatformPosition.x, currentPlatformPosition.y, currentPlatformPosition.z + (sizeZ/2) + (gap/2));
-            mpMeshFilter.mesh.vertices = GenerateVerticesPartialZ(gap);
-        }
-        else
-        {
-            mp.transform.position = new Vector3(currentPlatformPosition.x, currentPlatformPosition.y, currentPlatformPosition.z - (sizeZ/2) + (gap/2));
-            mpMeshFilter.mesh.vertices = GenerateVerticesPartialZ(gap);
-        }
-
-        mpMeshFilter.mesh.triangles = GenerateTriangles();
-        mpMeshFilter.mesh.RecalculateNormals();
-        mp.GetComponent<MeshCollider>().sharedMesh = mpMeshFilter.mesh;
-        mp.GetComponent<Rigidbody>().useGravity = true;
-
-        return mp;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    private GameObject GenerateAdditionalPlatformX(Vector3 currentPlatformPosition, float gap)
+    private void UpdateBaseAndInitPlatforms(GameObject platform) 
     {
-        GameObject mp = Instantiate(emptyPlatformPrefab, currentPlatformPosition, Quaternion.identity);
-
-        var mpMeshFilter = mp.GetComponent<MeshFilter>();
-        mpMeshFilter.mesh = new Mesh();
-
-        if (gap > 0)
-        {
-            mp.transform.position = new Vector3(currentPlatformPosition.x + (sizeX / 2) + (gap / 2), currentPlatformPosition.y, currentPlatformPosition.z);
-            mpMeshFilter.mesh.vertices = GenerateVerticesPartialX(gap);
-        }
-        else
-        {
-            mp.transform.position = new Vector3(currentPlatformPosition.x - (sizeX / 2) + (gap / 2), currentPlatformPosition.y, currentPlatformPosition.z);
-            mpMeshFilter.mesh.vertices = GenerateVerticesPartialX(gap);
-        }
-
-        mpMeshFilter.mesh.triangles = GenerateTriangles();
-        mpMeshFilter.mesh.RecalculateNormals();
-        mp.GetComponent<MeshCollider>().sharedMesh = mpMeshFilter.mesh;
-        mp.GetComponent<Rigidbody>().useGravity = true;
-
-        return mp;
+        initPlatform = platform;
+        basePlatform = platform;
     }
 
-    private GameObject GenerateInitPlatform()
+    private IEnumerator DestroyAdditionalPlatform(GameObject gameObject)
     {
-        GameObject mp = Instantiate(emptyPlatformPrefab, initZTransform.position, Quaternion.identity);
-        var mpMeshFilter = mp.GetComponent<MeshFilter>();
-        mpMeshFilter.mesh = new Mesh();
-        mpMeshFilter.mesh.vertices = GenerateVerticesInit();
-        mpMeshFilter.mesh.triangles = GenerateTriangles();
-        mpMeshFilter.mesh.RecalculateNormals();
-        mp.GetComponent<MeshCollider>().sharedMesh = mpMeshFilter.mesh;
-
-        return mp;
-    }
-
-    private Vector3[] GenerateVerticesPositiveGapZ(float gap)
-    {
-        return new Vector3[]
-        {
-            new Vector3(sizeX / 2f, 0.05f, (sizeZ - gap)/2f),
-            new Vector3(sizeX / 2f, 0.05f, -1 * (sizeZ - gap)/2f),
-            new Vector3(-1f * sizeX / 2f, 0.05f, (sizeZ - gap)/2f),
-            new Vector3(-1f * sizeX / 2f, 0.05f, -1 * (sizeZ - gap)/2f),
-
-            new Vector3(sizeX / 2f, -0.05f, -1f * (sizeZ - gap)/2f),
-            new Vector3(-1f * sizeX / 2f, -0.05f, -1f * (sizeZ - gap)/2f),
-            new Vector3(-1f * sizeX / 2f, -0.05f, (sizeZ - gap)/2f),
-            new Vector3(sizeX / 2f, -0.05f, (sizeZ - gap)/2f),
-        };
-    }
-
-    private Vector3[] GenerateVerticesPositiveGapX(float gap)
-    {
-        return new Vector3[]
-        {
-            new Vector3((sizeX - gap)/2f, 0.05f, sizeZ / 2f),
-            new Vector3((sizeX - gap)/2f, 0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1f * (sizeX - gap)/2f, 0.05f, sizeZ / 2f),
-            new Vector3(-1f *(sizeX - gap)/2f, 0.05f, -1f * sizeZ / 2f),
-
-            new Vector3((sizeX - gap)/2f, -0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1f * (sizeX - gap)/2f, -0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1f * (sizeX - gap)/2f, -0.05f, sizeZ / 2f),
-            new Vector3((sizeX - gap)/2f, -0.05f, sizeZ / 2f),
-        };
-    }
-
-    private Vector3[] GenerateVerticesNegativeGapZ(float gap)
-    {
-        return new Vector3[]
-        {
-            new Vector3(sizeX / 2f, 0.05f, (sizeZ + gap)/2f),
-            new Vector3(sizeX / 2f, 0.05f, -1f * (sizeZ + gap)/2f),
-            new Vector3(-1f * sizeX / 2f, 0.05f, (sizeZ + gap)/2f),
-            new Vector3(-1f * sizeX / 2f, 0.05f, -1f * (sizeZ + gap)/2f),
-
-            new Vector3(sizeX / 2f, -0.05f, -1f * (sizeZ + gap)/2f),
-            new Vector3(-1f * sizeX / 2f, -0.05f, -1f * (sizeZ + gap)/2f),
-            new Vector3(-1f * sizeX / 2f, -0.05f, (sizeZ + gap)/2f),
-            new Vector3(sizeX / 2f, -0.05f, (sizeZ + gap)/2f),
-        };
-    }
-
-    private Vector3[] GenerateVerticesNegativeGapX(float gap)
-    {
-        return new Vector3[]
-        {
-             new Vector3((sizeX + gap)/2f, 0.05f, sizeZ / 2f),
-            new Vector3((sizeX + gap)/2f, 0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1f * (sizeX + gap)/2f, 0.05f, sizeZ / 2f),
-            new Vector3(-1f * (sizeX + gap)/2f, 0.05f, -1f * sizeZ / 2f),
-
-            new Vector3((sizeX + gap)/2f, -0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1 * (sizeX + gap)/2f, -0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1 * (sizeX + gap)/2f, -0.05f, sizeZ / 2f),
-            new Vector3((sizeX + gap)/2f, -0.05f, sizeZ / 2f),
-        };
-    }
-
-    private Vector3[] GenerateVerticesPartialZ(float gap)
-    {
-        return new Vector3[]
-        {
-            new Vector3(sizeX / 2f, 0.05f, gap/2f),
-            new Vector3(sizeX / 2f, 0.05f, -1f * gap/2f),
-            new Vector3(-1f * sizeX / 2f, 0.05f, gap/2f),
-            new Vector3(-1f * sizeX / 2f, 0.05f, -1f * gap/2f),
-
-            new Vector3(sizeX / 2f, -0.05f, -1f * gap/2f),
-            new Vector3(-1f * sizeX / 2f, -0.05f, -1f * gap/2f),
-            new Vector3(-1f * sizeX / 2f, -0.05f, gap/2f),
-            new Vector3(sizeX / 2f, -0.05f, gap/2f),
-        };
-    }
-
-    private Vector3[] GenerateVerticesPartialX(float gap)
-    {
-        return new Vector3[]
-        {
-            new Vector3(gap/2f, 0.05f, sizeZ / 2f),
-            new Vector3(gap/2f, 0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1f * gap/2f, 0.05f, sizeZ / 2f),
-            new Vector3(-1f * gap/2f, 0.05f, -1f * sizeZ / 2f),
-
-            new Vector3(gap/2f, -0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1f * gap/2f, -0.05f, -1f * sizeZ / 2f),
-            new Vector3(-1f * gap/2f, -0.05f, sizeZ / 2f),
-            new Vector3(gap/2f, -0.05f, sizeZ / 2f),
-        };
-    }
-
-    Vector3[] GenerateVerticesInit()
-    {
-        return new Vector3[]
-        {
-            new Vector3(0.5f, 0.05f, 0.5f),
-            new Vector3(0.5f, 0.05f, -0.5f),
-            new Vector3(-0.5f, 0.05f, 0.5f),
-            new Vector3(-0.5f, 0.05f, -0.5f),
-
-            new Vector3(0.5f, -0.05f, -0.5f),
-            new Vector3(-0.5f, -0.05f, -0.5f),
-            new Vector3(-0.5f, -0.05f, 0.5f),
-            new Vector3(0.5f, -0.05f, 0.5f),
-        };
-    }
-
-    int[] GenerateTriangles()
-    {
-        return new int[] { 0, 1, 3, 0, 3, 2, 3, 1, 4, 3, 4, 5, 3, 5, 6, 6, 2, 3, 5, 4, 7, 6, 5, 7, 0, 2, 7, 2, 6, 7, 0, 4, 1, 0, 7, 4 };
+        yield return new WaitForSeconds(3.5f);
+        Destroy(gameObject);
     }
 }
