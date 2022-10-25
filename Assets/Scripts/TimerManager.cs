@@ -45,9 +45,9 @@ public class TimerManager : MonoBehaviour
 
     void Update()
     {
-        foreach(var timer in timers) 
+        for(int i = timers.Count - 1; i >= 0; i--) 
         {
-            timer.Update();
+            timers[i].Update();
             print("Here" + Time.deltaTime);
         }
     }
