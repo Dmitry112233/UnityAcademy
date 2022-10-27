@@ -26,8 +26,12 @@ public class PlayerMovement : MonoBehaviour
 
         if(!agent.SamplePathPosition(NavMesh.AllAreas, 1, out hit)) 
         {
-            var index = IndexFromMask(hit.mask);
-            if(index == 3)
+            var slowZoneArea = 1 << NavMesh.GetAreaFromName("SlowZone");
+
+
+            // Потомучто у нас 32  система и побитовое умножение даст единицу только когда единица будет под единецей того же разряда другого числа => 0000 0010 0000
+            //                                                                                                                                         0000 0010 0000
+            if ((hit.mask & slowZoneArea) != 0)
             {
                 agent.speed = 2f;
             }
@@ -36,15 +40,5 @@ public class PlayerMovement : MonoBehaviour
                 agent.speed = 8f;
             }
         }
-    }
-
-    private int IndexFromMask(int mask)
-    {
-        for (int i = 0; i < 32; ++i)
-        {
-            if ((1 << i) == mask)
-                return i;
-        }
-        return -1;
     }
 }

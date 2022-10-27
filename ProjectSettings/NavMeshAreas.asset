@@ -13,18 +13,18 @@ NavMeshProjectSettings:
     cost: 2
   - name: SlowZone
     cost: 5
-  - name: 
-    cost: 1
-  - name: 
-    cost: 1
-  - name: 
-    cost: 1
-  - name: 
-    cost: 1
-  - name: 
-    cost: 1
-  - name: 
-    cost: 1
+  - name: FastZone
+    cost: 5
+  - name: FastZone1
+    cost: 5
+  - name: FastZone2
+    cost: 5
+  - name: FastZone3
+    cost: 5
+  - name: FastZone4
+    cost: 5
+  - name: FastZone5
+    cost: 5
   - name: 
     cost: 1
   - name: 
