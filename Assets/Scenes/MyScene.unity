@@ -4179,6 +4179,7 @@ MonoBehaviour:
   allProjectiles: {fileID: 476201173}
   projectilePrefab: {fileID: 7441499303493309032, guid: 02f417a5e45b6be4fbe421a4f7c2f924, type: 3}
   projectileInitPosition: {fileID: 68592952}
+  upVectorY: 1
 --- !u!65 &1446454892
 BoxCollider:
   m_ObjectHideFlags: 0
