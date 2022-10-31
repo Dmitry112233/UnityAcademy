@@ -129,3 +129,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 30
   destroyDelay: 3
+  hitEffect: {fileID: 7758256011287239213, guid: d2e61c52ee2df2e46b7cb7f409a44112, type: 3}
+  playerTransform: {fileID: 0}
