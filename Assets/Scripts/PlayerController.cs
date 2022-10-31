@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
             var direction = Quaternion.AngleAxis(-45.0f, transform.right) * transform.forward;
             
             direction.Normalize();
-            var bullet = Instantiate(projectilePrefab, projectileInitPosition.position, Quaternion.identity);
+            var bullet = Instantiate(projectilePrefab, projectileInitPosition.position, transform.rotation);
             bullet.transform.SetParent(allProjectiles.transform);
             bullet.GetComponent<Rigidbody>()?.AddForce(direction * bullet.GetComponent<Projectile>().speed, ForceMode.Impulse);
             IsThrowWithAngle = false;

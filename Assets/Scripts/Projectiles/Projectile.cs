@@ -9,8 +9,6 @@ public class Projectile : MonoBehaviour
 
     public GameObject hitEffect;
 
-    public Transform playerTransform;
-
     protected IEnumerator WaitAndDestroy()
     {
         yield return new WaitForSeconds(destroyDelay);
@@ -22,7 +20,9 @@ public class Projectile : MonoBehaviour
         if (hitEffect != null) 
         {
             var contactPosition = collision.GetContact(0).point;
-            Instantiate(hitEffect, contactPosition, playerTransform.rotation);
+
+            Instantiate(hitEffect, contactPosition - new Vector3(0f,0f,2f), transform.rotation);
+            Destroy(gameObject);
         }
     }
 }

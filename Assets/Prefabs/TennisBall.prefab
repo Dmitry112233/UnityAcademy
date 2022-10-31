@@ -129,4 +129,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.08
   destroyDelay: 10
+  hitEffect: {fileID: 7758256011287239213, guid: d2e61c52ee2df2e46b7cb7f409a44112, type: 3}
   decreaseBounceValue: 0.15
