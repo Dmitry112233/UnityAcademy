@@ -6,8 +6,6 @@ public class Grenade : Projectile
 {
     public float radius;
 
-    public GameObject explosionPrefab;
-
     public float force;
 
     void Start()
@@ -19,7 +17,7 @@ public class Grenade : Projectile
     {
         yield return new WaitForSeconds(destroyDelay);
         Collider[] affectedColliders = Physics.OverlapSphere(transform.position, radius);
-        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        Instantiate(hitEffect, transform.position, Quaternion.identity);
         new List<Collider>(affectedColliders).ForEach(x => x.attachedRigidbody?.AddExplosionForce(force, transform.position, radius));
         Destroy(gameObject);
     }

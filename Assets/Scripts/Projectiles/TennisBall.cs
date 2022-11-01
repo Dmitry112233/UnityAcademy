@@ -18,12 +18,11 @@ public class TennisBall : Projectile
 
     private void Update()
     {
-        RecalculateBallBounce();
     }
 
     private void RecalculateBallBounce()
     {
-        if (currentCollisionNumber != numberOfCollisions) 
+        if (currentCollisionNumber != numberOfCollisions && myCollider != null) 
         {
             if (myCollider.material.bounciness >= decreaseBounceValue) 
             {
@@ -35,14 +34,29 @@ public class TennisBall : Projectile
             }
             currentCollisionNumber = numberOfCollisions;
         }
-        if(myCollider.material.bounciness == 0.0f) 
+        if(myCollider != null) 
         {
-            myCollider.material.bounciness = 1.0f;
+            if (myCollider.material.bounciness == 0.0f)
+            {
+                myCollider.material.bounciness = 1.0f;
+            }
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         numberOfCollisions++;
+
+        if (hitEffect != null)
+        {
+            var contactPosition = collision.GetContact(0).point;
+            var direction = contactPosition - PlayerTransform.position;
+            direction.Normalize();
+            direction = direction * -1f;
+            var effect = Instantiate(hitEffect, contactPosition, Quaternion.LookRotation(direction, Vector3.up));
+            effect.transform.SetParent(collision.transform);
+        }
+
+        RecalculateBallBounce();
     }
 }

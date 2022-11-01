@@ -20,9 +20,11 @@ public class PlayerController : MonoBehaviour
     
     private float forwardForce = 0.0f;
     
-    private bool IsThrowWithAngle;
+    private bool isThrowWithAngle;
     
-    private bool IsThrowForward;
+    private bool isThrowForward;
+
+    private bool isShoot;
 
     void Start()
     {
@@ -47,16 +49,18 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            isShoot = true;
+
             switch (projectilePrefab.tag)
             {
                 case "Grenade":
-                    IsThrowWithAngle = true;
+                    isThrowWithAngle = true;
                     break;
                 case "TennisBall":
-                    IsThrowWithAngle = true;
+                    isThrowWithAngle = true;
                     break;
                 case "Bullet":
-                    IsThrowForward = true;
+                    isThrowForward = true;
                     break;
             }
         }
@@ -76,22 +80,26 @@ public class PlayerController : MonoBehaviour
 
     private void Shoot() 
     {
-        if (IsThrowWithAngle) 
-        {
-            var direction = Quaternion.AngleAxis(-45.0f, transform.right) * transform.forward;
-            
-            direction.Normalize();
-            var bullet = Instantiate(projectilePrefab, projectileInitPosition.position, transform.rotation);
-            bullet.transform.SetParent(allProjectiles.transform);
-            bullet.GetComponent<Rigidbody>()?.AddForce(direction * bullet.GetComponent<Projectile>().speed, ForceMode.Impulse);
-            IsThrowWithAngle = false;
-        }
-        if (IsThrowForward) 
+        if (isShoot) 
         {
             var bullet = Instantiate(projectilePrefab, projectileInitPosition.position, Quaternion.identity);
             bullet.transform.SetParent(allProjectiles.transform);
-            bullet.GetComponent<Rigidbody>()?.AddForce(transform.forward * bullet.GetComponent<Projectile>().speed, ForceMode.Impulse);
-            IsThrowForward = false;
+            bullet.GetComponent<Projectile>().PlayerTransform = transform;
+
+            if (isThrowWithAngle)
+            {
+                var direction = Quaternion.AngleAxis(-45.0f, transform.right) * transform.forward;
+                direction.Normalize();
+                bullet.GetComponent<Rigidbody>()?.AddForce(direction * bullet.GetComponent<Projectile>().speed, ForceMode.Impulse);
+                isThrowWithAngle = false;
+            }
+            if (isThrowForward)
+            {
+                bullet.GetComponent<Rigidbody>()?.AddForce(transform.forward * bullet.GetComponent<Projectile>().speed, ForceMode.Impulse);
+                isThrowForward = false;
+            }
+
+            isShoot = false;
         }
     }
 }
