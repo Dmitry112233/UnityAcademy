@@ -52,7 +52,6 @@ public class TennisBall : Projectile
             var contactPosition = collision.GetContact(0).point;
             var direction = contactPosition - PlayerTransform.position;
             direction.Normalize();
-            direction = direction * -1f;
             var effect = Instantiate(hitEffect, contactPosition, Quaternion.LookRotation(direction, Vector3.up));
             effect.transform.SetParent(collision.transform);
         }
