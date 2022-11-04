@@ -84,7 +84,6 @@ public class PlayerController : MonoBehaviour
     {
         if (isReadyToDie && speedY == 0.0f)
         {
-            //Animator.SetTrigger(MyTags.Animations.Die);
             isScriptAvailible = false;
             dieClip.Play();
             Animator.SetTrigger(MyTags.Animations.Die);
