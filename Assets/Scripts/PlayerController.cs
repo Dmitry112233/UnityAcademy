@@ -27,7 +27,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        Spawn();
+        isScriptAvailible = true;
+        //Spawn();
     }
 
     void Update()
@@ -95,7 +96,7 @@ public class PlayerController : MonoBehaviour
 
     private void RecalculateSpeedY() 
     {
-        if (!Controller.isGrounded && isJumping)
+        if (!Controller.isGrounded)
         {
             speedY += gravity * Time.deltaTime;
         }
