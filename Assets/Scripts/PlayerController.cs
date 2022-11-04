@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class PlayerController : MonoBehaviour
 {
+    public PlayableDirector dieClip;
     public float movementSpeed = 2.0f;
     public float sprintSpeed = 5.0f;
     public float rotationSpeed = 100f;
@@ -82,8 +84,10 @@ public class PlayerController : MonoBehaviour
     {
         if (isReadyToDie && speedY == 0.0f)
         {
-            Animator.SetTrigger(MyTags.Animations.Die);
+            //Animator.SetTrigger(MyTags.Animations.Die);
             isScriptAvailible = false;
+            dieClip.Play();
+            Animator.SetTrigger(MyTags.Animations.Die);
         }
     }
 
