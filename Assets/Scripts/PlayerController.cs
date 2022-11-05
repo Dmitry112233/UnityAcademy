@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 
 public class PlayerController : MonoBehaviour
 {
+    public List<Rigidbody> ragdollElements;
+
     public PlayableDirector dieClip;
     public float movementSpeed = 2.0f;
     public float sprintSpeed = 5.0f;
@@ -84,9 +87,13 @@ public class PlayerController : MonoBehaviour
     {
         if (isReadyToDie && speedY == 0.0f)
         {
+            Animator.enabled = false;
+            foreach (var element in ragdollElements) 
+            {
+                element.isKinematic = false;
+            }
             isScriptAvailible = false;
             dieClip.Play();
-            Animator.SetTrigger(MyTags.Animations.Die);
         }
     }
 
