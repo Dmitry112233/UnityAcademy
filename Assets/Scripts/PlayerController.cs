@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
         Animator.SetTrigger(MyTags.Animations.Attack);
     }
 
-    private void SetReadyToDie() 
+    public void SetReadyToDie() 
     {
         isReadyToDie = true;
     }
