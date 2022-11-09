@@ -4,6 +4,8 @@ public class TennisBall : Projectile
 {
     public float decreaseBounceValue = 0.0f;
 
+    public AudioSource tennisAudio;
+
     private int currentCollisionNumber = 0;
 
     private int numberOfCollisions = 0;
@@ -49,6 +51,7 @@ public class TennisBall : Projectile
 
         if (hitEffect != null)
         {
+            //AudioManager.Instance.PlayAudio(tennisAudio);
             var contactPosition = collision.GetContact(0).point;
             var direction = contactPosition - PlayerTransform.position;
             direction.Normalize();

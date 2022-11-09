@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
 
     public float upVectorY = 1.0f;
 
+    //public AudioSource shootAudio;
+
     private Rigidbody myBody;
 
     private float sideForce = 0.0f;
@@ -98,6 +100,8 @@ public class PlayerController : MonoBehaviour
                 bullet.GetComponent<Rigidbody>()?.AddForce(transform.forward * bullet.GetComponent<Projectile>().speed, ForceMode.Impulse);
                 isThrowForward = false;
             }
+
+            //AudioManager.Instance.PlayAudio(shootAudio);
 
             isShoot = false;
         }

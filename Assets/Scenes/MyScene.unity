@@ -3977,67 +3977,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!1001 &1343988604
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5475958644620474732, guid: 54b4d0079e0a33f40a82675f79433967, type: 3}
-      propertyPath: m_Name
-      value: TennisEffect
-      objectReference: {fileID: 0}
-    - target: {fileID: 5839343968200382834, guid: 54b4d0079e0a33f40a82675f79433967, type: 3}
-      propertyPath: ShapeModule.m_Rotation.y
-      value: 180
-      objectReference: {fileID: 0}
-    - target: {fileID: 6599389768106251912, guid: 54b4d0079e0a33f40a82675f79433967, type: 3}
-      propertyPath: m_RootOrder
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 6599389768106251912, guid: 54b4d0079e0a33f40a82675f79433967, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -5.648
-      objectReference: {fileID: 0}
-    - target: {fileID: 6599389768106251912, guid: 54b4d0079e0a33f40a82675f79433967, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -2.933
-      objectReference: {fileID: 0}
-    - target: {fileID: 6599389768106251912, guid: 54b4d0079e0a33f40a82675f79433967, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -29.855
-      objectReference: {fileID: 0}
-    - target: {fileID: 6599389768106251912, guid: 54b4d0079e0a33f40a82675f79433967, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6599389768106251912, guid: 54b4d0079e0a33f40a82675f79433967, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6599389768106251912, guid: 54b4d0079e0a33f40a82675f79433967, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6599389768106251912, guid: 54b4d0079e0a33f40a82675f79433967, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6599389768106251912, guid: 54b4d0079e0a33f40a82675f79433967, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6599389768106251912, guid: 54b4d0079e0a33f40a82675f79433967, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6599389768106251912, guid: 54b4d0079e0a33f40a82675f79433967, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 54b4d0079e0a33f40a82675f79433967, type: 3}
 --- !u!1 &1363928057
 GameObject:
   m_ObjectHideFlags: 0
@@ -4241,6 +4180,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 7441499303493309032, guid: 02f417a5e45b6be4fbe421a4f7c2f924, type: 3}
   projectileInitPosition: {fileID: 68592952}
   upVectorY: 1
+  shootAudio: {fileID: 0}
 --- !u!65 &1446454892
 BoxCollider:
   m_ObjectHideFlags: 0

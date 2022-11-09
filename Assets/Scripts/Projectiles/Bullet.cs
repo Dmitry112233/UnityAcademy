@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Bullet : Projectile
 {
+    public AudioSource bulletAudio;
 
     void Start()
     {
@@ -12,6 +13,7 @@ public class Bullet : Projectile
     {
         if (hitEffect != null)
         {
+            //AudioManager.Instance.PlayAudio(bulletAudio);
             var contactPosition = collision.GetContact(0).point;
             var direction = contactPosition - PlayerTransform.position;
             direction.Normalize();
