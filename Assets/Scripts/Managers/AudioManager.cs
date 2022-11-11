@@ -1,4 +1,5 @@
 using Assets.Scripts.Data;
+using Assets.Scripts.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -54,16 +55,16 @@ public class AudioManager : Singleton<AudioManager>
 
         go.transform.SetParent(this.transform);
 
-        /*var audioSource = go.AddComponent<AudioSource>().GetCopyOf(audioMap[initialAudioSourceName]);
-        audioSource.Play();*/
+        var audioSource = go.AddComponent<AudioSource>().GetCopyOf(audioMap[initialAudioSourceName]);
+        audioSource.Play();
         
         //opportunity to add component and customize via script
 
-        UnityEditorInternal.ComponentUtility.CopyComponent(audioMap[initialAudioSourceName]);
-        UnityEditorInternal.ComponentUtility.PasteComponentAsNew(go);
+        /*UnityEditorInternal.ComponentUtility.CopyComponent(audioMap[initialAudioSourceName]);
+        UnityEditorInternal.ComponentUtility.PasteComponentAsNew(go);*/
 
-        var audioSource = go.GetComponent<AudioSource>();
-        audioSource.Play();
+        //var audioSource = go.GetComponent<AudioSource>();
+        //audioSource.Play();
 
         audioGameObjects.Add(go);
     }

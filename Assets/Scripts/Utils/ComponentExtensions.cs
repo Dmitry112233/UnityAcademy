@@ -25,7 +25,9 @@ namespace Assets.Scripts.Utils
                 {
                     try
                     {
-                        pinfo.SetValue(comp, pinfo.GetValue(other, null), null);
+                        if (!pinfo.IsDefined(typeof(ObsoleteAttribute), true))
+                            pinfo.SetValue(comp, pinfo.GetValue(other, null), null);
+
                     }
                     catch
                     {
