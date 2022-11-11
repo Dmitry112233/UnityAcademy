@@ -1,3 +1,4 @@
+using Assets.Scripts.Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,8 +9,6 @@ public class Grenade : Projectile
 
     public float force;
 
-    public AudioSource explosionAudio;
-
     void Start()
     {
         StartCoroutine(Explode());
@@ -18,10 +17,10 @@ public class Grenade : Projectile
     private IEnumerator Explode()
     {
         yield return new WaitForSeconds(destroyDelay);
+        AudioManager.Instance.Play3DAudio(transform, MyTags.AudioSourceNames.Grenade);
         Collider[] affectedColliders = Physics.OverlapSphere(transform.position, radius);
         Instantiate(hitEffect, transform.position, Quaternion.identity);
         new List<Collider>(affectedColliders).ForEach(x => x.attachedRigidbody?.AddExplosionForce(force, transform.position, radius));
-        //AudioManager.Instance.PlayAudio(explosionAudio);
         Destroy(gameObject);
     }
 

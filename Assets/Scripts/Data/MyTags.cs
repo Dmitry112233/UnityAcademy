@@ -16,5 +16,13 @@ namespace Assets.Scripts.Data
             public const string TennisBall = "TennisBall";
             public const string Grenade = "Grenade";
         }
+
+        public class AudioSourceNames 
+        {
+            public const string Shot = "shot";
+            public const string Bullet = "bullet";
+            public const string Grenade = "grenade";
+            public const string Tennis = "tennis";
+        }
     }
 }

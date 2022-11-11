@@ -16,4 +16,13 @@ public class Projectile : MonoBehaviour
         yield return new WaitForSeconds(destroyDelay);
         Destroy(gameObject);
     }
+
+    protected void DisplayEffect(Collision collision) 
+    {
+        var contactPosition = collision.GetContact(0).point;
+        var direction = contactPosition - PlayerTransform.position;
+        direction.Normalize();
+        var effect = Instantiate(hitEffect, contactPosition, Quaternion.LookRotation(direction, Vector3.up));
+        effect.transform.SetParent(collision.transform);
+    }
 }

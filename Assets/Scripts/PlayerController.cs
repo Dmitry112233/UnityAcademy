@@ -1,3 +1,4 @@
+using Assets.Scripts.Data;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -13,8 +14,6 @@ public class PlayerController : MonoBehaviour
     public Transform projectileInitPosition;
 
     public float upVectorY = 1.0f;
-
-    //public AudioSource shootAudio;
 
     private Rigidbody myBody;
 
@@ -101,9 +100,8 @@ public class PlayerController : MonoBehaviour
                 isThrowForward = false;
             }
 
-            //AudioManager.Instance.PlayAudio(shootAudio);
-
             isShoot = false;
+            AudioManager.Instance.PlayAudio(MyTags.AudioSourceNames.Shot);
         }
     }
 }

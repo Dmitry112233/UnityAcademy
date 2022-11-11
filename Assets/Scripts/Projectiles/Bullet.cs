@@ -1,8 +1,8 @@
+using Assets.Scripts.Data;
 using UnityEngine;
 
 public class Bullet : Projectile
 {
-    public AudioSource bulletAudio;
 
     void Start()
     {
@@ -13,12 +13,8 @@ public class Bullet : Projectile
     {
         if (hitEffect != null)
         {
-            //AudioManager.Instance.PlayAudio(bulletAudio);
-            var contactPosition = collision.GetContact(0).point;
-            var direction = contactPosition - PlayerTransform.position;
-            direction.Normalize();
-            var effect = Instantiate(hitEffect, contactPosition, Quaternion.LookRotation(direction, Vector3.up));
-            effect.transform.SetParent(collision.transform);
+            AudioManager.Instance.Play3DAudio(transform, MyTags.AudioSourceNames.Bullet);
+            DisplayEffect(collision);
             Destroy(gameObject);
         }
     }
