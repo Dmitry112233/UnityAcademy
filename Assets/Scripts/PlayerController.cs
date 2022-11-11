@@ -7,8 +7,6 @@ public class PlayerController : MonoBehaviour
 
     public float rotationSpeed;
 
-    public GameObject allProjectiles;
-
     public GameObject projectilePrefab;
 
     public Transform projectileInitPosition;
@@ -22,10 +20,8 @@ public class PlayerController : MonoBehaviour
     private float forwardForce = 0.0f;
     
     private bool isThrowWithAngle;
-    
-    private bool isThrowForward;
 
-    private bool isShoot;
+    private bool isShot;
 
     void Start()
     {
@@ -40,7 +36,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         Move();
-        Shoot();
+        Shot();
     }
 
     private void ReadKeyBoard() 
@@ -50,7 +46,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            isShoot = true;
+            isShot = true;
 
             switch (projectilePrefab.tag)
             {
@@ -61,7 +57,7 @@ public class PlayerController : MonoBehaviour
                     isThrowWithAngle = true;
                     break;
                 case "Bullet":
-                    isThrowForward = true;
+                    isThrowWithAngle = false;
                     break;
             }
         }
@@ -79,29 +75,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Shoot() 
+    private void Shot() 
     {
-        if (isShoot) 
+        if (isShot) 
         {
-            var bullet = Instantiate(projectilePrefab, projectileInitPosition.position, Quaternion.identity);
-            bullet.transform.SetParent(allProjectiles.transform);
-            bullet.GetComponent<Projectile>().PlayerTransform = transform;
-
-            if (isThrowWithAngle)
-            {
-                var direction = Quaternion.AngleAxis(-45.0f, transform.right) * transform.forward;
-                direction.Normalize();
-                bullet.GetComponent<Rigidbody>()?.AddForce(direction * bullet.GetComponent<Projectile>().speed, ForceMode.Impulse);
-                isThrowWithAngle = false;
-            }
-            if (isThrowForward)
-            {
-                bullet.GetComponent<Rigidbody>()?.AddForce(transform.forward * bullet.GetComponent<Projectile>().speed, ForceMode.Impulse);
-                isThrowForward = false;
-            }
-
-            isShoot = false;
-            AudioManager.Instance.PlayAudio(MyTags.AudioSourceNames.Shot);
+            projectilePrefab.GetComponent<Projectile>().Shot(projectileInitPosition, isThrowWithAngle);
+            isShot = false;
         }
     }
 }
