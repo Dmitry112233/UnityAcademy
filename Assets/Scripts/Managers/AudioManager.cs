@@ -57,14 +57,6 @@ public class AudioManager : Singleton<AudioManager>
 
         var audioSource = go.AddComponent<AudioSource>().GetCopyOf(audioMap[initialAudioSourceName]);
         audioSource.Play();
-        
-        //opportunity to add component and customize via script
-
-        /*UnityEditorInternal.ComponentUtility.CopyComponent(audioMap[initialAudioSourceName]);
-        UnityEditorInternal.ComponentUtility.PasteComponentAsNew(go);*/
-
-        //var audioSource = go.GetComponent<AudioSource>();
-        //audioSource.Play();
 
         audioGameObjects.Add(go);
     }
