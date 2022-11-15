@@ -9,19 +9,14 @@ public class Grenade : Projectile
 
     public float force;
 
-    void Start()
-    {
-        StartCoroutine(Explode());
-    }
-
-    private IEnumerator Explode()
+    protected override IEnumerator WaitAndRelease()
     {
         yield return new WaitForSeconds(destroyDelay);
         AudioManager.Instance.Play3DAudio(transform, MyTags.AudioSourceNames.Grenade);
         Collider[] affectedColliders = Physics.OverlapSphere(transform.position, radius);
         Instantiate(hitEffect, transform.position, Quaternion.identity);
         new List<Collider>(affectedColliders).ForEach(x => x.attachedRigidbody?.AddExplosionForce(force, transform.position, radius));
-        Destroy(gameObject);
+        Release();
     }
 
     private void OnDrawGizmos()

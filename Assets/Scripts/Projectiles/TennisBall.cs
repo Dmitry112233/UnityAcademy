@@ -14,11 +14,6 @@ public class TennisBall : Projectile
     void Start()
     {
         myCollider = gameObject.GetComponent<Collider>();
-        StartCoroutine(WaitAndDestroy());
-    }
-
-    private void Update()
-    {
     }
 
     private void RecalculateBallBounce()
@@ -35,13 +30,6 @@ public class TennisBall : Projectile
             }
             currentCollisionNumber = numberOfCollisions;
         }
-        if(myCollider != null) 
-        {
-            if (myCollider.material.bounciness == 0.0f)
-            {
-                myCollider.material.bounciness = 1.0f;
-            }
-        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -55,5 +43,11 @@ public class TennisBall : Projectile
         }
 
         RecalculateBallBounce();
+    }
+
+    protected override void Release()
+    {
+        myCollider.material.bounciness = 1.0f;
+        base.Release();
     }
 }

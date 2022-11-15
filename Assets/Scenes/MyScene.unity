@@ -148,7 +148,7 @@ Transform:
   m_GameObject: {fileID: 68592951}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.001, y: 0.096, z: 0.843}
-  m_LocalScale: {x: 0.0508898, y: -0.08651574, z: 0.052937217}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1446454895}
@@ -4251,7 +4251,7 @@ Transform:
   m_GameObject: {fileID: 1446454889}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -10.59, y: -5.55, z: -31.16}
-  m_LocalScale: {x: 2.2891, y: 1.9700747, z: 2.0143}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 747696552}
@@ -7433,6 +7433,54 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &2104221642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2104221644}
+  - component: {fileID: 2104221643}
+  m_Layer: 0
+  m_Name: PoolObjectManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2104221643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2104221642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81e38806fdd6b9b42b74d7c6b5407f00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amountOfProjectiles: 10
+  bulletPrefab: {fileID: 6589912009164980508, guid: c4b4ee54b0a31f9469e16d1072b5ec87, type: 3}
+  grenadPrefab: {fileID: 2291568023413811755, guid: 4349c79e8d1111440ba36b8769872c38, type: 3}
+  tennisBallPrefab: {fileID: 2116987048098732024, guid: 02f417a5e45b6be4fbe421a4f7c2f924, type: 3}
+--- !u!4 &2104221644
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2104221642}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.23, y: -2.93, z: -30.68}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2109471549
 GameObject:
   m_ObjectHideFlags: 0

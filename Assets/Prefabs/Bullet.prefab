@@ -131,6 +131,7 @@ MonoBehaviour:
   speed: 100
   destroyDelay: 3
   hitEffect: {fileID: 7758256011287239213, guid: d2e61c52ee2df2e46b7cb7f409a44112, type: 3}
+  particleSystems: {fileID: 0}
 --- !u!96 &-9178998549412203211
 TrailRenderer:
   serializedVersion: 2

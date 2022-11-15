@@ -12,11 +12,10 @@ public class Projectile : MonoBehaviour
 
     public Transform PlayerTransform { get; set; }
 
-    protected IEnumerator WaitAndDestroy()
-    {
-        yield return new WaitForSeconds(destroyDelay);
-        Destroy(gameObject);
-    }
+    private Rigidbody rigidBody;
+    private TrailRenderer trailRender;
+    private Rigidbody RigidBody { get { return rigidBody = rigidBody ?? GetComponent<Rigidbody>(); } }
+    private TrailRenderer TrailRenderer { get { return trailRender = trailRender ?? GetComponent<TrailRenderer>(); } }
 
     protected void DisplayEffect(Collision collision)
     {
@@ -24,25 +23,50 @@ public class Projectile : MonoBehaviour
         var direction = contactPosition - PlayerTransform.position;
         direction.Normalize();
         var effect = Instantiate(hitEffect, contactPosition, Quaternion.LookRotation(direction, Vector3.up));
+
         effect.transform.SetParent(collision.transform);
     }
 
     public void Shot(Transform projectileInitPosition, bool isThrowWithAngle)
     {
-        var bullet = Instantiate(gameObject, projectileInitPosition.position, Quaternion.identity);
-        bullet.transform.SetParent(projectileInitPosition);
-        bullet.GetComponent<Projectile>().PlayerTransform = transform;
+        var projectile = PoolObjectManager.Instance.GetPooledObject(this);
+
+        projectile.SetActive(true);
+        projectile.transform.position = projectileInitPosition.position;
+        projectile.transform.rotation = Quaternion.identity;
+
+        projectile.transform.SetParent(projectileInitPosition);
+
+        projectile.GetComponent<Projectile>().PlayerTransform = transform;
+
+        projectile.GetComponent<MonoBehaviour>().StartCoroutine(projectile.GetComponent<Projectile>().WaitAndRelease());
 
         if (isThrowWithAngle)
         {
             var direction = Quaternion.AngleAxis(-45.0f, projectileInitPosition.right) * projectileInitPosition.forward;
             direction.Normalize();
-            bullet.GetComponent<Rigidbody>()?.AddForce(direction * bullet.GetComponent<Projectile>().speed, ForceMode.Impulse);
+            projectile.GetComponent<Rigidbody>()?.AddForce(direction * projectile.GetComponent<Projectile>().speed, ForceMode.Impulse);
         }
         else 
         {
-            bullet.GetComponent<Rigidbody>()?.AddForce(projectileInitPosition.forward * bullet.GetComponent<Projectile>().speed, ForceMode.Impulse);
+            projectile.GetComponent<Rigidbody>()?.AddForce(projectileInitPosition.forward * projectile.GetComponent<Projectile>().speed, ForceMode.Impulse);
         }
+
         AudioManager.Instance.PlayAudio(MyTags.AudioSourceNames.Shot);
+    }
+
+    protected virtual void Release() 
+    {
+        RigidBody.velocity = Vector3.zero;
+        RigidBody.angularVelocity = Vector3.zero;
+        TrailRenderer.Clear();
+        gameObject.SetActive(false);
+        PoolObjectManager.Instance.ReturnToPool(this);
+    }
+
+    protected virtual IEnumerator WaitAndRelease()
+    {
+        yield return new WaitForSeconds(destroyDelay);
+        Release();
     }
 }
