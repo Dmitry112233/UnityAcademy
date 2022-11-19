@@ -1,3 +1,4 @@
+using Assets.Scripts.Data;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,43 +10,64 @@ public class PoolObjectManager : Singleton<PoolObjectManager>
     public Projectile grenadPrefab;
     public Projectile tennisBallPrefab;
 
-    private List<Projectile> pool;
+    private Dictionary<ProjectileType, List<Projectile>> pools;
 
     private void Awake()
     {
-        pool = new List<Projectile>();
+        pools = new Dictionary<ProjectileType, List<Projectile>>();
 
-        for(int i = 0; i < amountOfProjectiles; i++) 
+        var tennisBalls = new List<Projectile>();
+        var bullets = new List<Projectile>();
+        var grenades = new List<Projectile>();
+
+        for (int i = 0; i < amountOfProjectiles; i++)
         {
             var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
             var grenad = Instantiate(grenadPrefab, transform.position, Quaternion.identity);
             var tennisBall = Instantiate(tennisBallPrefab, transform.position, Quaternion.identity);
-            
+
             bullet.transform.SetParent(transform);
             grenad.transform.SetParent(transform);
             tennisBall.transform.SetParent(transform);
-            
+
             bullet.gameObject.SetActive(false);
             grenad.gameObject.SetActive(false);
             tennisBall.gameObject.SetActive(false);
-            
-            pool.Add(bullet);
-            pool.Add(grenad);
-            pool.Add(tennisBall);
+
+            bullets.Add(bullet);
+            grenades.Add(grenad);
+            tennisBalls.Add(tennisBall);
         }
+
+        pools.Add(ProjectileType.TennisBall, tennisBalls);
+        pools.Add(ProjectileType.Bullet, bullets);
+        pools.Add(ProjectileType.Grenade, grenades);
+
     }
 
-    public GameObject GetPooledObject(Projectile objectToInstatiate) 
+    public GameObject GetPooledObject(ProjectileType projectileType)
     {
-        var obj = pool.Find(x => x.GetType() == objectToInstatiate.GetType());
-        
-        if (obj != null) 
+        Projectile obj = null;
+
+        if (pools[projectileType].Count > 0)
         {
-            pool.Remove(obj);
+            obj = pools[projectileType][0];
+            pools[projectileType].Remove(obj);
         }
-        else 
+        else
         {
-            obj = Instantiate(objectToInstatiate, transform.position, Quaternion.identity);
+            switch (projectileType)
+            {
+                case ProjectileType.Grenade:
+                    obj = Instantiate(grenadPrefab, transform.position, Quaternion.identity);
+                    break;
+                case ProjectileType.TennisBall:
+                    obj = Instantiate(tennisBallPrefab, transform.position, Quaternion.identity);
+                    break;
+                case ProjectileType.Bullet:
+                    obj = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+                    break;
+            }
             obj.transform.SetParent(transform);
             obj.gameObject.SetActive(false);
         }
@@ -53,16 +75,9 @@ public class PoolObjectManager : Singleton<PoolObjectManager>
         return obj.gameObject;
     }
 
-    public void ReturnToPool(Projectile objectToReturn) 
+    public void ReturnToPool(Projectile objectToReturn)
     {
-        if(pool.FindAll(x => x.GetType() == objectToReturn.GetType()).Count < amountOfProjectiles) 
-        {
-            objectToReturn.transform.SetParent(transform);
-            pool.Add(objectToReturn);
-        }
-        else 
-        {
-            Destroy(objectToReturn.gameObject);
-        }
+        objectToReturn.transform.SetParent(transform);
+        pools[objectToReturn.projectileType].Add(objectToReturn);
     }
 }

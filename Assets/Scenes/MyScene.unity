@@ -3684,7 +3684,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c3d2383237d9f14ca66596219716482, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 3919975947766591101, guid: 4349c79e8d1111440ba36b8769872c38, type: 3}
+  projectileType: 1
 --- !u!64 &1196553293
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4176,7 +4176,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 5
   rotationSpeed: 2
-  projectilePrefab: {fileID: 7441499303493309032, guid: 02f417a5e45b6be4fbe421a4f7c2f924, type: 3}
+  projectileType: 0
   projectileInitPosition: {fileID: 68592952}
   upVectorY: 1
 --- !u!65 &1446454892
@@ -7010,7 +7010,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c3d2383237d9f14ca66596219716482, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 869752796589745776, guid: c4b4ee54b0a31f9469e16d1072b5ec87, type: 3}
+  projectileType: 0
 --- !u!64 &1962167797
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7630,7 +7630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c3d2383237d9f14ca66596219716482, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 7441499303493309032, guid: 02f417a5e45b6be4fbe421a4f7c2f924, type: 3}
+  projectileType: 2
 --- !u!64 &2112015666
 MeshCollider:
   m_ObjectHideFlags: 0

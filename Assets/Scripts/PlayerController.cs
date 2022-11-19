@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 
     public float rotationSpeed;
 
-    public GameObject projectilePrefab;
+    public ProjectileType projectileType;
 
     public Transform projectileInitPosition;
 
@@ -18,13 +18,12 @@ public class PlayerController : MonoBehaviour
     private float sideForce = 0.0f;
     
     private float forwardForce = 0.0f;
-    
-    private bool isThrowWithAngle;
 
     private bool isShot;
 
     void Start()
     {
+        projectileType = ProjectileType.TennisBall;
         myBody = GetComponent<Rigidbody>();
     }
 
@@ -47,19 +46,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             isShot = true;
-
-            switch (projectilePrefab.tag)
-            {
-                case "Grenade":
-                    isThrowWithAngle = true;
-                    break;
-                case "TennisBall":
-                    isThrowWithAngle = true;
-                    break;
-                case "Bullet":
-                    isThrowWithAngle = false;
-                    break;
-            }
         }
     }
 
@@ -79,8 +65,40 @@ public class PlayerController : MonoBehaviour
     {
         if (isShot) 
         {
-            projectilePrefab.GetComponent<Projectile>().Shot(projectileInitPosition, isThrowWithAngle);
+            var projectile = InstatiateProjectile();
+            
+            Vector3 direction = new Vector3();
+
+            switch (projectileType)
+            {
+                case ProjectileType.Grenade:
+                    direction = Quaternion.AngleAxis(-45.0f, projectileInitPosition.right) * projectileInitPosition.forward;
+                    break;
+                case ProjectileType.TennisBall:
+                    direction = Quaternion.AngleAxis(-45.0f, projectileInitPosition.right) * projectileInitPosition.forward;
+                    break;
+                case ProjectileType.Bullet:
+                    direction = projectileInitPosition.forward;
+                    break;
+            }
+    
+            direction.Normalize();
+
+            projectile.GetComponent<Projectile>().Shot(direction);
+
             isShot = false;
         }
+    }
+
+    private GameObject InstatiateProjectile() 
+    {
+        var projectile = PoolObjectManager.Instance.GetPooledObject(projectileType);
+
+        projectile.transform.position = projectileInitPosition.position;
+        projectile.transform.rotation = Quaternion.identity;
+        projectile.transform.SetParent(projectileInitPosition);
+        projectile.GetComponent<Projectile>().TransformToDisplay = projectileInitPosition.transform;
+
+        return projectile;
     }
 }

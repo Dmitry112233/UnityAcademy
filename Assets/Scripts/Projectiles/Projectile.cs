@@ -6,11 +6,13 @@ public class Projectile : MonoBehaviour
 {
     public float speed = 10;
 
+    public ProjectileType projectileType;
+
     public float destroyDelay = 3;
 
     public GameObject hitEffect;
 
-    public Transform PlayerTransform { get; set; }
+    public Transform TransformToDisplay { get; set; }
 
     private Rigidbody rigidBody;
     private TrailRenderer trailRender;
@@ -20,42 +22,24 @@ public class Projectile : MonoBehaviour
     protected void DisplayEffect(Collision collision)
     {
         var contactPosition = collision.GetContact(0).point;
-        var direction = contactPosition - PlayerTransform.position;
+        var direction = contactPosition - TransformToDisplay.position;
         direction.Normalize();
         var effect = Instantiate(hitEffect, contactPosition, Quaternion.LookRotation(direction, Vector3.up));
 
         effect.transform.SetParent(collision.transform);
     }
 
-    public void Shot(Transform projectileInitPosition, bool isThrowWithAngle)
+    public void Shot(Vector3 direction)
     {
-        var projectile = PoolObjectManager.Instance.GetPooledObject(this);
-
-        projectile.SetActive(true);
-        projectile.transform.position = projectileInitPosition.position;
-        projectile.transform.rotation = Quaternion.identity;
-
-        projectile.transform.SetParent(projectileInitPosition);
-
-        projectile.GetComponent<Projectile>().PlayerTransform = transform;
-
-        projectile.GetComponent<MonoBehaviour>().StartCoroutine(projectile.GetComponent<Projectile>().WaitAndRelease());
-
-        if (isThrowWithAngle)
-        {
-            var direction = Quaternion.AngleAxis(-45.0f, projectileInitPosition.right) * projectileInitPosition.forward;
-            direction.Normalize();
-            projectile.GetComponent<Rigidbody>()?.AddForce(direction * projectile.GetComponent<Projectile>().speed, ForceMode.Impulse);
-        }
-        else 
-        {
-            projectile.GetComponent<Rigidbody>()?.AddForce(projectileInitPosition.forward * projectile.GetComponent<Projectile>().speed, ForceMode.Impulse);
-        }
+        var go = this.gameObject;
+        go.SetActive(true);
+        go.GetComponent<MonoBehaviour>().StartCoroutine(WaitAndRelease());
+        go.GetComponent<Rigidbody>()?.AddForce(direction * go.GetComponent<Projectile>().speed, ForceMode.Impulse);
 
         AudioManager.Instance.PlayAudio(MyTags.AudioSourceNames.Shot);
     }
 
-    protected virtual void Release() 
+    protected virtual void Release()
     {
         RigidBody.velocity = Vector3.zero;
         RigidBody.angularVelocity = Vector3.zero;

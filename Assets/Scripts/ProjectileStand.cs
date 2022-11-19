@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class ProjectileStand : MonoBehaviour
 {
-    public GameObject projectilePrefab;
+    public ProjectileType projectileType;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == MyTags.Player) 
         {
-            other.GetComponent<PlayerController>().projectilePrefab = projectilePrefab;
+            other.GetComponent<PlayerController>().projectileType = projectileType;
         }
     }
 }
