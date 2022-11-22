@@ -9,7 +9,7 @@ public class Bullet : Projectile
         {
             AudioManager.Instance.Play3DAudio(transform, MyTags.AudioSourceNames.Bullet);
             DisplayEffect(collision);
-            Release();
+            Relese();
         }
     }
 }

@@ -45,9 +45,9 @@ public class TennisBall : Projectile
         RecalculateBallBounce();
     }
 
-    protected override void Release()
+    public override void Relese()
     {
         myCollider.material.bounciness = 1.0f;
-        base.Release();
+        Relese();
     }
 }

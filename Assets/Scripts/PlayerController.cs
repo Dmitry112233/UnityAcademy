@@ -1,4 +1,5 @@
 using Assets.Scripts.Data;
+using Assets.Scripts.Projectiles;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -93,12 +94,7 @@ public class PlayerController : MonoBehaviour
     private GameObject InstatiateProjectile() 
     {
         var projectile = PoolObjectManager.Instance.GetPooledObject(projectileType);
-
-        projectile.transform.position = projectileInitPosition.position;
-        projectile.transform.rotation = Quaternion.identity;
-        projectile.transform.SetParent(projectileInitPosition);
-        projectile.GetComponent<Projectile>().TransformToDisplay = projectileInitPosition.transform;
-
+        projectile.GetComponent<Projectile>().Init(new PoolInitProjectileData(projectileInitPosition));
         return projectile;
     }
 }
