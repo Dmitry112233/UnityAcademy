@@ -11,15 +11,11 @@ public class PoolObjectManager : Singleton<PoolObjectManager>
     public Projectile grenadPrefab;
     public Projectile tennisBallPrefab;
 
-    private Dictionary<ProjectileType, List<IPoolable>> pools;
+    List<IPoolable> pool;
 
     private void Awake()
     {
-        pools = new Dictionary<ProjectileType, List<IPoolable>>();
-
-        var tennisBalls = new List<IPoolable>();
-        var bullets = new List<IPoolable>();
-        var grenades = new List<IPoolable>();
+        pool = new List<IPoolable>();
 
         for (int i = 0; i < amountOfProjectiles; i++)
         {
@@ -35,46 +31,38 @@ public class PoolObjectManager : Singleton<PoolObjectManager>
             grenad.gameObject.SetActive(false);
             tennisBall.gameObject.SetActive(false);
 
-            bullets.Add(bullet);
-            grenades.Add(grenad);
-            tennisBalls.Add(tennisBall);
+            pool.Add(bullet);
+            pool.Add(grenad);
+            pool.Add(tennisBall);
         }
-
-        pools.Add(ProjectileType.TennisBall, tennisBalls);
-        pools.Add(ProjectileType.Bullet, bullets);
-        pools.Add(ProjectileType.Grenade, grenades);
-
     }
 
-    public IPoolable GetPooledObject(ProjectileType projectileType)
+    public IPoolable GetPooledObject(IPoolable obj)
     {
-        IPoolable obj;
-        Projectile newObj = null;
+        IPoolable newObj;
 
-        if (pools[projectileType].Count > 0)
+        newObj = pool.Find(x => x.GetType() == obj.GetType());
+
+        if (newObj != null)
         {
-            obj = pools[projectileType][0];
-            pools[projectileType].Remove(obj);
+            pool.Remove(newObj);
         }
         else
         {
-            switch (projectileType)
+            switch (obj.GetType().ToString())
             {
-                case ProjectileType.Grenade:
+                case "Grenade":
                     newObj = Instantiate(grenadPrefab, transform.position, Quaternion.identity);
                     break;
-                case ProjectileType.TennisBall:
+                case "TennisBall":
                     newObj = Instantiate(tennisBallPrefab, transform.position, Quaternion.identity);
                     break;
-                case ProjectileType.Bullet:
+                case "Bullet":
                     newObj = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
                     break;
             }
 
-            newObj.transform.SetParent(transform);
-            newObj.gameObject.SetActive(false);
-
-            obj = newObj;
+            newObj.AfterCreate(transform);
         }
 
         obj.onReleseEvent += Obj_onReleseEvent;
@@ -84,14 +72,7 @@ public class PoolObjectManager : Singleton<PoolObjectManager>
 
     private void Obj_onReleseEvent(IPoolable obj)
     {
-        obj.Reset();
-        objectToReturn.transform.SetParent(transform);
-        pools[objectToReturn.projectileType].Add(objectToReturn);
-    }
-
-    public void ReturnToPool(Projectile objectToReturn)
-    {
-        objectToReturn.transform.SetParent(transform);
-        pools[objectToReturn.projectileType].Add(objectToReturn);
+        obj.Reset(transform);
+        pool.Add(obj);
     }
 }

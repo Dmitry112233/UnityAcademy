@@ -1,4 +1,5 @@
 using Assets.Scripts.Data;
+using Assets.Scripts.Managers.PoolObject;
 using Assets.Scripts.Projectiles;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ public class PlayerController : MonoBehaviour
     public float movementSpeed;
 
     public float rotationSpeed;
+
+    public Projectile bulletProjectile;
 
     public ProjectileType projectileType;
 
@@ -85,16 +88,17 @@ public class PlayerController : MonoBehaviour
     
             direction.Normalize();
 
-            projectile.GetComponent<Projectile>().Shot(direction);
+            var projectile1 = (Projectile)projectile;
+            projectile1.Shot(direction);
 
             isShot = false;
         }
     }
 
-    private GameObject InstatiateProjectile() 
+    private IPoolable InstatiateProjectile() 
     {
-        var projectile = PoolObjectManager.Instance.GetPooledObject(projectileType);
-        projectile.GetComponent<Projectile>().Init(new PoolInitProjectileData(projectileInitPosition));
+        var projectile = PoolObjectManager.Instance.GetPooledObject(bulletProjectile);
+        projectile.Init(new PoolInitProjectileData(projectileInitPosition));
         return projectile;
     }
 }

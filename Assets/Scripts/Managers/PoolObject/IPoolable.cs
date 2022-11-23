@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Assets.Scripts.Managers.PoolObject
 {
@@ -8,8 +9,10 @@ namespace Assets.Scripts.Managers.PoolObject
 
         public void Init(PoolInitData data);
 
-        public void Reset();
+        public void Reset(Transform parrentTransform);
 
         public void Relese();
+
+        public void AfterCreate(Transform parrentTransform);
     }
 }

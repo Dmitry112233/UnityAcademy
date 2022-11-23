@@ -61,16 +61,23 @@ public class Projectile : MonoBehaviour, IPoolable
         GetComponent<Projectile>().TransformToDisplay = dataConverted.IniPosition;
     }
 
-    public void Reset()
+    public void Reset(Transform parentTransform)
     {
         RigidBody.velocity = Vector3.zero;
         RigidBody.angularVelocity = Vector3.zero;
         TrailRenderer.Clear();
         gameObject.SetActive(false);
+        transform.SetParent(parentTransform);
     }
 
     public virtual void Relese()
     {
         onReleseEvent?.Invoke(this);
+    }
+
+    public void AfterCreate(Transform parrentTransform)
+    {
+        transform.SetParent(parrentTransform);
+        gameObject.SetActive(false);
     }
 }
